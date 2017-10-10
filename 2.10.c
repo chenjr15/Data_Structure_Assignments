@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include "textbook_def.h"
 
 #include "SqList_lib.h"
@@ -17,10 +17,12 @@ int main(){
 
 Status DeleteK(SqList * a ,int i ,int k ){
 	if (i<1 ||k<0|| (i+k)>a->length) return INFEASIBLE;
-	while ((i+k)<a->length){
+	//memcpy(&(a->elem[i-1]),&(a->elem[i+k-1]),(k+1)*sizeof(ElemType));
+	while ((i+k)<a->length+1){
 		a->elem[i-1] = a->elem[i-1+k];
 		i++;
 	}
 	a->length -= k;
 	return OK;
+	
 }
