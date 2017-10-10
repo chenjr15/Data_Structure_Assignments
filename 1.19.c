@@ -1,46 +1,50 @@
 #include <stdio.h>
 #include <inttypes.h>
 #define BUFFER_SIZE 12
+#define MAXINT sizeof(unsigned int)
 #define O_F(x) printf("%d!=%d\n",x,factorial(x))
-uint32_t factorial(uint32_t n);
-uint32_t* fun(uint32_t n,uint32_t *a, uint32_t arrsize);
+
+typedef enum {OK, OVERFLOW, OVERSIZE} Status;
+
+Status fun(uint32_t n,uint32_t *a, uint32_t arrsize);
 int main(){
-	uint32_t i=0;
+	uint32_t n=0;
 	uint32_t a[BUFFER_SIZE]={0,};
-	//five times test
-	for(;i<14;i++){
-		printf("\n\n n = %d\n",i);
-		if (fun(i,a,BUFFER_SIZE))
-			for(uint32_t j=0;j<i;j++)
-				printf("%d!*2^%d=%d\n",j,j,a[j]);	
 	
-		else 
+	for(;n<14;n++){
+		printf("\nn = %d\n",n);
+		Status sta;
+		sta = fun(n,a,BUFFER_SIZE);
+		switch(sta){
+		case OVERFLOW:
 			printf("OVERFLOW\n");
+			break;
+		case OVERSIZE:
+			printf("n(%d) is larger than arrsize(%d)!",n,BUFFER_SIZE);
+			break;
+		default:
+			for(uint32_t j=0;j<n;j++)
+				printf("%d!*2^%d=%u\n",j,j,a[j]);
+			
+			}
 	}
 	return 0;
 }
-uint32_t factorial(uint32_t n){
-	uint32_t ret=1,i;
-	if(n==0)return 1;
-	for(i=1;i<=n;i++)
-		ret*=i;
-	return ret;
 
-}
-uint32_t* fun(uint32_t n,uint32_t *arr, uint32_t arrsize){
+Status fun(uint32_t n,uint32_t *arr, uint32_t arrsize){
 	uint32_t ret=1;
 	unsigned int k =0;
-	if(n>arrsize)return NULL;
+	if(n>arrsize)return OVERSIZE;
 	if(n==0){
 		arr[0]=1;
-		return arr;
+		return OK;
 	}
 	for(k=1;k<n;k++){
-		arr[k]=factorial(k)<<k;
-		if(arr[k]<arr[k-1]) return NULL;
+		arr[k]=(arr[k-1]*k)<<1;
+		if(arr[k]<arr[k-1]) return OVERFLOW;
 	}
 	
-	return arr;
+	return OK;
 
 }
 
