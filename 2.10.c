@@ -1,3 +1,14 @@
+/**
+ *  \file 2.10.c
+ *  \author ChenJR
+ *  错误：
+ *    原算法在左移元素的时候从后往前移，
+ *  前面的元素会被后面的元素覆盖而造成数据丢失
+ *  低效：
+ *    每删一个元素都移动一次后方所有元素
+ *  
+ *  
+ */
 #include <stdio.h>
 #include <string.h>
 #include "textbook_def.h"
