@@ -1,13 +1,13 @@
 /**
  *  \file 2.15.c
  *  \author ChenJR
+ *  T(n) = O(n)
  */
 #include "textbook_def.h"
 #include "linklist.h"
 #include <stdio.h>
 #include <stdlib.h>
 LinkList linkthem(LinkList ha, int lena ,LinkList hb ,int lenb);
-
 int main(){
 	LinkList ha,hb,hc;
 	int lena=0,lenb=0,lenc=0;
@@ -30,7 +30,6 @@ int main(){
 	DestoryList(hc);
 	return 0;
 }
-
 LinkList linkthem(LinkList ha, int lena ,LinkList hb ,int lenb){
 	//plong 总是指向较长的表的头节点(若两表相等则指向hb的头节点)
 	LinkList  plong ,pshort,hc;
@@ -44,11 +43,12 @@ LinkList linkthem(LinkList ha, int lena ,LinkList hb ,int lenb){
 	}
 	//hc总是指向较短的表的头节点
 	hc = pshort;
-	//遍历pshort至较短的表的尾节点
+	//遍历pshort至较短表的尾节点
 	while(pshort ->next)
 		pshort =pshort ->next;
 	//连接两表
 	pshort -> next = plong->next;
+	//释放较长表的头节点
+	free(plong);
 	return hc;
-	
 }
