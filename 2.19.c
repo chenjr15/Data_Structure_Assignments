@@ -6,18 +6,13 @@
 #include "linklist.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define minK -1
-#define maxK 20
-int main(){
+
+
+Status excude(LinkList list, ElemType minK,  ElemType maxK){
 	
-	LinkList list, p;
-	LNode * pMax,*pMin,*t;
+	LNode * pMax,*pMin,*t , *p;
 	pMax=pMin=t=NULL;
-	int len=0;
-	list = CreateList();
-	FillList(list, len, 0,16);
 	
-	PrintList("original list :",list,0);
 	p = list;
 	while(p->next){
 		if((p ->next)->data >minK){
@@ -46,6 +41,21 @@ int main(){
 		pMin->next = NULL;
 	}
 	
+	return 0;
+}
+
+int main(){
+	
+	LinkList list, p;
+	LNode * pMax,*pMin,*t;
+	pMax=pMin=t=NULL;
+	int len=0;
+	list = CreateList();
+	FillList(list, len, 0,16);
+	
+	PrintList("original list :",list,0);
+	
+	excude(list , 5,10);
 
 	PrintList("modified list :",list,0);
 	
