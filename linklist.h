@@ -11,6 +11,7 @@
 
 
 #define CreateList() CreateNode(0,NULL)
+
 #define FillList(head,len,start,end) \
 	do{ \
 		LNode *rear =(LNode*) head; \
@@ -20,6 +21,7 @@
 			rear = rear->next; \
 		} \
 	}while(0)
+
 #define PrintList(name, head ,len)\
 	do { \
 		printf("%s (%d):",name,len); \
