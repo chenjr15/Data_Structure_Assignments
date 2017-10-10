@@ -19,7 +19,7 @@ Status excude(LinkList list, ElemType minK,  ElemType maxK){
 			pMin = p;
 			
 			break;
-		}
+		} 
 			p = p->next;
 	}
 	while(p->next){
