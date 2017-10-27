@@ -9,9 +9,10 @@
 #define INVALID_ARGUMENT -3
 
 #define MAXSIZE 50
+#define ElemType int;
 
 typedef int  Status ;
-typedef int ElemType;
+
 typedef char bool;
 typedef struct {
 	ElemType elem[MAXSIZE];
