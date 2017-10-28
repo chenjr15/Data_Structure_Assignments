@@ -17,6 +17,7 @@ typedef char bool;
 #define OPERATOR_T -1
 #define INTEGER_T 0
 #define FLOAT_T 1
+#define MAX_ELEM_SIZE 100
 
 union Vars{
     int i;
