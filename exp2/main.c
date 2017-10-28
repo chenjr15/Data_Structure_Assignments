@@ -14,7 +14,7 @@ PriStu pries[10] = {
         {'/', 4},
         {'+', 3},
         {'-', 3},
-//	{')',2},
+      	{')',2},
 //	{'#',1},
 };
 
@@ -22,12 +22,12 @@ int Parser( char *str_head, ElemType *elem_array);
 
 Status ToNum(char *str, ElemType *elem);
 
-Status do_judge(ElemType e,LinerStack affix,LinerStack optr);
+Status do_judge(ElemType e,LinerStack *suffix_p,LinerStack *optr_p);
 
 char GetPri(char op);
 
 int main() {
-  LinerStack affix, optr;
+  LinerStack suffix, optr;
   char *inputstr;
   ElemType elem_list[MAX_ELEM_SIZE] = { 0, };
   ElemType temp;
@@ -35,7 +35,7 @@ int main() {
   char buffer[100] = {0};
   int elem_count = 0;
   inputstr = buffer;
-  InitStack(&affix);
+  InitStack(&suffix);
   InitStack(&optr);
   scanf("%50s", inputstr);
   elem_count = Parser(inputstr, elem_list);
@@ -43,10 +43,10 @@ int main() {
     switch (elem_list[i].type) {
       case INTEGER_T:
       case FLOAT_T:
-        PushStack(&affix, elem_list[i]);
+        PushStack(&suffix, elem_list[i]);
         break;
       default:
-        do_judge(elem_list[i],affix,optr);
+        do_judge(elem_list[i],&suffix,&optr);
 
 
     }
@@ -54,10 +54,10 @@ int main() {
   }
   //str ends
   while (INFEASIBLE != PopStack(&optr, &temp)) {
-    PushStack(&affix, temp);
+    PushStack(&suffix, temp);
   }
 
-  ShowStack(&affix, 0);
+  ShowStack(&suffix, 0);
   getchar();
   return 0;
 }//main
@@ -128,42 +128,45 @@ Status ToNum(char *str, ElemType *elem) {
   return OK;
 
 }//ToNum
-Status do_judge(ElemType e,LinerStack affix,LinerStack optr) {
+Status do_judge(ElemType e,LinerStack *suffix_p,LinerStack *optr_p) {
   ElemType current={0};
   ElemType top={0};
   switch(e.elem.op){
     case '(':
-      PushStack(&optr,e);
+      PushStack(optr_p,e);
       break;
     case ')':
       while(1){
-        PopStack(&optr,&current);
+        PopStack(optr_p,&current);
         if(current.elem.op == '(') break;
-        else PushStack(&affix,current);
+        else PushStack(suffix_p,current);
       }
       break;
     default:
-      if(optr.size>0)
-        top = GetTop(&optr);
+      if(optr_p->size>0)
+        top = GetTop(optr_p);
       else
         top.elem.op = 0;
-      if(compare_pri(top.elem.op,e.elem.op)>0){
-        //栈内操作符优先级较高,push
-        PushStack(&optr,e);
+      if(compare_pri(e.elem.op,top.elem.op)>0){
+        //当前优先级高于栈内操作符优先级,push
+        PushStack(optr_p,e);
+
       }
       else{
         //栈内操作符优先级较低或相等
+
         while(1){
-          if(optr.size!=0){
-            PopStack(&optr,&top) ;
-            PushStack(&affix,top);
+          if(optr_p->size!=0){
+            PopStack(optr_p,&top) ;
+            PushStack(suffix_p,top);
 
           }else top.elem.op=0;
           if(compare_pri(top.elem.op,e.elem.op)<=0){
-            PushStack(&optr,e);
+            PushStack(optr_p,e);
             break;
           }
         }//while
+
 
       }//else,pri is lower
   }//switch

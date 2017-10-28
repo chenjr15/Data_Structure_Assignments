@@ -44,13 +44,13 @@ void ShowStack(LinerStack* S,unsigned int limit){
 	while(len){
         switch  (S->base[len-1].type ){
             case OPERATOR_T:
-                printf("%c ",S->base[--len]);
+                printf("%c ",S->base[--len].elem.op);
                 break;
             case INTEGER_T:
-                printf("%d ",S->base[--len]);
+                printf("%d ",S->base[--len].elem.i);
                 break;
             case FLOAT_T:
-                printf("%g ",S->base[--len]);
+                printf("%g ",S->base[--len].elem.f);
                 break;
         }
 
