@@ -15,6 +15,7 @@ typedef char bool;
 
 #define STACK_INIT_LEN 20
 #define OPERATOR_T -1
+#define  OPERATOR_PREFIX_T -2
 #define INTEGER_T 0
 #define FLOAT_T 1
 #define MAX_ELEM_SIZE 100

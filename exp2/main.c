@@ -2,17 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 #include "Stack.h"
 
 #define compare_pri(l, r) (GetPri(l)-GetPri(r))
 #define   GetFloat(e)   (((e).type == FLOAT_T)?((e).elem.f):((e).elem.i))
+#define NUM_OF_FUNC 6
+#define NUM_OF_OP 6
 
 typedef struct {
     char op;
     char pri;
 } PriStu;
+typedef struct {
+    char * funcname;
+    int len;
+    char op;
+    char pri;
+}FuncStu;
 
-PriStu pries[10] = {
+PriStu pries[NUM_OF_OP] = {
         {'(', 2},
         {'*', 4},
         {'/', 4},
@@ -21,6 +30,15 @@ PriStu pries[10] = {
         {')', 2},
 //	{'#',1},
 };
+FuncStu funcs[NUM_OF_FUNC] = {
+  {"exp",3,'e',5},
+  {"sqrt",4,'s',5},
+  {"log10",5,'l',5},
+  {"sin",3,'i',5},
+  {"cos",3,'o',5},
+  {"ln",2,'n',5}
+};
+
 
 int Parser(char *str_head, ElemType *elem_array);
 
@@ -33,11 +51,11 @@ Status Operate(LinerStack *suffix_p, ElemType *ret);
 
 char GetPri(char op);
 
-int main() {
+int main(){
   //------init-----//
   LinerStack suffix, optr;
   char *inputstr;
-  ElemType elem_list[MAX_ELEM_SIZE] = {0,};
+  ElemType elem_list[MAX_ELEM_SIZE] = { {.elem.i=0,.type = 0},};
   ElemType temp,result;
   char op = 0;
   char buffer[100] = {0};
@@ -46,7 +64,7 @@ int main() {
   InitStack(&suffix);
   InitStack(&optr);
   //------------//
-  scanf("%50s", inputstr);
+  scanf_s("%s", inputstr,100);
   elem_count = Parser(inputstr, elem_list);
   for (int i = 0; i < elem_count; i++) {
     switch (elem_list[i].type) {
@@ -68,18 +86,31 @@ int main() {
   Operate(&suffix,&result);
   printf("%g ",result.elem.f);
   getchar();
+  getchar();
   return 0;
 }//main
 
 
 char GetPri(char op) {
+  //获取优先级
   PriStu *p;
+  FuncStu *q;
   char op_t = 0;
+  //遍历双目运算符表
   p = pries;
-  while (op_t = (*p).op) {
+  while ((p - pries)<NUM_OF_OP) {
+	  op_t = (*p).op;
+	  if (op_t == op)
+		  return (*p).pri;
+	  p++;
+  }
+  //遍历双目运算符表
+  q = funcs;
+  while ((q - funcs)<NUM_OF_FUNC) {
+	op_t = (*q).op;
     if (op_t == op)
-      return (*p).pri;
-    p++;
+      return (*q).pri;
+    q++;
   }
   return 0;
 }//GetPri
@@ -91,23 +122,42 @@ int Parser(char *str_head, ElemType *elem_array) {
   ElemType *pElem = elem_array;
   ns = NumStr;
   char c;
-  while (c = *s++) {
-    if ((c <= '9' && c >= '0') || c == '.') {
+  while (c = *s) {
+    if (isdigit(c) || c == '.') {
       *ns++ = c;
-    } else if (GetPri(c)) {
-      //is operator
+      s++;
+    } else{
+      //is not a digit
       if (ns != NumStr) {
         ToNum(NumStr, pElem++);
         memset(NumStr, 0, 20);
         ns = NumStr;
       }
-      pElem->elem.op = c;
-      pElem->type = OPERATOR_T;
-      pElem++;
-
-    }//if( GetPri(c))
-  }//while
-  if (ns != NumStr) {
+      do{
+        //is operator
+		  bool found_flag = 0;
+		  for(int i =0; i<NUM_OF_OP;i++)
+			  if (pries[i].op == c) {
+				  pElem->elem.op = c;
+				  pElem->type = OPERATOR_T;
+				  pElem++;
+				  found_flag = 1;
+          s++;
+				  break;
+			  }
+		  if (found_flag)break;
+      for(int i = 0; i<NUM_OF_FUNC;i++)
+        if(!strncmp(s,funcs[i].funcname,funcs[i].len)){
+          s+=funcs[i].len;
+          pElem->elem.op = funcs[i].op;
+          pElem->type = OPERATOR_PREFIX_T;
+          pElem++;
+			    break;
+			  }
+      }while(0);
+    }
+	}//while
+  if(ns != NumStr) {
     ToNum(NumStr, pElem++);
     memset(NumStr, 0, 20);
     ns = NumStr;
@@ -126,11 +176,14 @@ Status ToNum(char *str, ElemType *elem) {
       break;
     }
   }
+  char * n=NULL;
   if (flag) {
-    sscanf(str, "%f", &(elem->elem.f));
+    //sscanf(str, "%f", &(elem->elem.f));
+    
+    elem->elem.f=strtof(str,n);
     elem->type = FLOAT_T;
   } else {
-    sscanf(str, "%d", &(elem->elem.i));
+    elem->elem.i = strtod(str,n);
     elem->type = INTEGER_T;
   }
 
@@ -138,8 +191,8 @@ Status ToNum(char *str, ElemType *elem) {
 
 }//ToNum
 Status do_judge(ElemType e, LinerStack *suffix_p, LinerStack *optr_p) {
-  ElemType current = {0};
-  ElemType top = {0};
+  ElemType current = {{.i=0},};
+  ElemType top = {{.i=0},};
   switch (e.elem.op) {
     case '(':
       PushStack(optr_p, e);
@@ -184,7 +237,7 @@ Status do_judge(ElemType e, LinerStack *suffix_p, LinerStack *optr_p) {
 }
 
 Status Operate(LinerStack *suffix_p, ElemType *ret) {
-  LinerStack S = {0};
+  LinerStack S = {{{.elem.i=0}}};
   ElemType a, b, r;
   for (int i = 0; i < suffix_p->size; i++) {
     switch (suffix_p->base[i].type) {
@@ -208,21 +261,53 @@ Status Operate(LinerStack *suffix_p, ElemType *ret) {
           case '/':
             r.elem.f = (GetFloat(a) / GetFloat(b));
             break;
-          default:
+          default :
             r.elem.f = 0;
         }
         r.type=FLOAT_T;
         PushStack(&S, r);
         break;
 
-      default:
-        //if (suffix_p->base[i].elem.op == 'e')
+      case OPERATOR_PREFIX_T:
+        PopStack(&S, &a);
+        switch (suffix_p->base[i].elem.op)
+        {
+        case 'e':
+          r.elem.f = exp(GetFloat(a));
+          break;
+        case 's':
+          r.elem.f = sqrt(GetFloat(a));
+          break;
+        case 'l':
+          r.elem.f = log10(GetFloat(a));
+          break;
+        case 'i':
+          r.elem.f = sin(GetFloat(a));
+          break;
+        case 'o':
+          r.elem.f = cos(GetFloat(a));
+          break;
+        case 'n':
+          r.elem.f = log(GetFloat(a));
+          break;
+        default:
+          r.elem.f = 0;
+          break;
+        }//switch (suffix_p->base[i].elem.op)
+        r.type = FLOAT_T;
+        PushStack(&S, r);
         break;
 
+      default:
+        break;
     }//switch (suffix_p->base[i].type)
 
   }//for
   PopStack(&S,ret);
+  if(ret->type == INTEGER_T){
+    ret->type = FLOAT_T;
+    ret->elem.f = ret->elem.i;
+  }
 }
 
 
