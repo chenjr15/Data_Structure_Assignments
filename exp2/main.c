@@ -7,7 +7,7 @@
 
 #define compare_pri(l, r) (GetPri(l)-GetPri(r))
 #define   GetFloat(e)   (((e).type == FLOAT_T)?((e).elem.f):((e).elem.i))
-#define NUM_OF_FUNC 6
+#define NUM_OF_FUNC 7
 #define NUM_OF_OP 6
 
 typedef struct {
@@ -36,7 +36,8 @@ FuncStu funcs[NUM_OF_FUNC] = {
   {"log10",5,'l',5},
   {"sin",3,'i',5},
   {"cos",3,'o',5},
-  {"ln",2,'n',5}
+  {"ln",2,'n',5},
+  {"abs",3,'a',5},
 };
 
 
@@ -47,7 +48,7 @@ Status ToNum(char *str, ElemType *elem);
 Status do_judge(ElemType e, LinerStack *suffix_p, LinerStack *optr_p);
 
 Status Operate(LinerStack *suffix_p, ElemType *ret);
-
+inline void PrintWelcome();
 
 char GetPri(char op);
 
@@ -64,6 +65,7 @@ int main(){
   InitStack(&suffix);
   InitStack(&optr);
   //------------//
+  PrintWelcome();
   scanf_s("%s", inputstr,100);
   elem_count = Parser(inputstr, elem_list);
   for (int i = 0; i < elem_count; i++) {
@@ -290,6 +292,9 @@ Status Operate(LinerStack *suffix_p, ElemType *ret) {
         case 'n':
           r.elem.f = log(GetFloat(a));
           break;
+        case 'a':
+          r.elem.f = fabs(GetFloat(a));
+          break;
         default:
           r.elem.f = 0;
           break;
@@ -308,6 +313,14 @@ Status Operate(LinerStack *suffix_p, ElemType *ret) {
     ret->type = FLOAT_T;
     ret->elem.f = ret->elem.i;
   }
+}
+inline void PrintWelcome() {
+  printf("Supported functions:\n");
+  for (int i = 0; i < NUM_OF_FUNC; i++)
+    printf("%s ",funcs[i].funcname);
+  putchar('\n');
+  printf("Please input your experssions here:\n");
+
 }
 
 
