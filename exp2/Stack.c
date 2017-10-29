@@ -15,14 +15,14 @@ Status InitStack(LinerStack* S){
 }
 Status PushStack(LinerStack* S,ElemType data){
 	if (!S) return INVALID_ARGUMENT;
-	if(S->size == STACK_INIT_LEN )return OVERFLOW;
+	if(S->size == STACK_INIT_LEN )return OVERFLOW_S;
 	S->base[(S->size)++] =data;
 	return OK;
 }
 
 Status PopStack(LinerStack* S,ElemType* data){
 	if (!S) return INVALID_ARGUMENT;
-	if(S->size == 0)return INFEASIBLE;
+	if(S->size == 0)return INFEASIBLE_S;
     *data = S->base[--(S->size)];
 	return OK;
 }

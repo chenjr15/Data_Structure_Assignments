@@ -4,8 +4,8 @@
 #define FALSE 0
 #define OK 1
 #define ERROR 0
-#define INFEASIBLE -1
-#define OVERFLOW -2
+#define INFEASIBLE_S -1
+#define OVERFLOW_S -2
 #define INVALID_ARGUMENT -3
 
 
