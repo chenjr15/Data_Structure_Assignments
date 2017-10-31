@@ -48,7 +48,7 @@ Status ToNum(char *str, ElemType *elem);
 Status do_judge(ElemType e, LinerStack *suffix_p, LinerStack *optr_p);
 
 Status Operate(LinerStack *suffix_p, ElemType *ret);
-inline void PrintWelcome();
+void PrintWelcome();
 
 char GetPri(char op);
 
@@ -66,7 +66,7 @@ int main(){
   InitStack(&optr);
   //------------//
   PrintWelcome();
-  scanf_s("%s", inputstr,100);
+  scanf("%s", inputstr);
   elem_count = Parser(inputstr, elem_list);
   for (int i = 0; i < elem_count; i++) {
     switch (elem_list[i].type) {
@@ -314,7 +314,7 @@ Status Operate(LinerStack *suffix_p, ElemType *ret) {
     ret->elem.f = ret->elem.i;
   }
 }
-inline void PrintWelcome() {
+void PrintWelcome() {
   printf("Supported functions:\n");
   for (int i = 0; i < NUM_OF_FUNC; i++)
     printf("%s ",funcs[i].funcname);
