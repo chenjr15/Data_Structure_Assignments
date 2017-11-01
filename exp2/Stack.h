@@ -22,7 +22,7 @@ typedef char bool;
 
 union Vars{
     int i;
-    float f;
+    double f;
     char op;
 };
 typedef struct {

@@ -7,3 +7,5 @@ debug/
 *.depend
 */cmake-build-debug/
 */.idea/
+*.pdf
+*.zip

@@ -6,7 +6,7 @@
 #include "Stack.h"
 
 #define compare_pri(l, r) (GetPri(l)-GetPri(r))
-#define   GetFloat(e)   (((e).type == FLOAT_T)?((e).elem.f):((e).elem.i))
+#define   GetFloat(e) ((e).elem.f)
 #define NUM_OF_FUNC 7
 #define NUM_OF_OP 6
 
@@ -21,6 +21,7 @@ typedef struct {
     char pri;
 }FuncStu;
 
+//四则运算及括号优先级表
 PriStu pries[NUM_OF_OP] = {
         {'(', 2},
         {'*', 4},
@@ -30,6 +31,7 @@ PriStu pries[NUM_OF_OP] = {
         {')', 2},
 //	{'#',1},
 };
+//函数优先级表
 FuncStu funcs[NUM_OF_FUNC] = {
   {"exp",3,'e',5},
   {"sqrt",4,'s',5},
@@ -66,7 +68,13 @@ int main(){
   InitStack(&optr);
   //------------//
   PrintWelcome();
-  scanf("%s", inputstr);
+#ifdef  _MSC_BUILD
+  scanf_s("%s", inputstr,99);
+#else 
+  scanf("%99s", inputstr);
+#endif //  _MSC_BUILD
+
+  
   elem_count = Parser(inputstr, elem_list);
   for (int i = 0; i < elem_count; i++) {
     switch (elem_list[i].type) {
@@ -170,24 +178,24 @@ int Parser(char *str_head, ElemType *elem_array) {
 Status ToNum(char *str, ElemType *elem) {
   if (str == NULL || elem == NULL)
     return INVALID_ARGUMENT;
-  unsigned int i = 0;
-  bool flag = 0;
-  while (i < 20 && str[i] != 0) {
-    if (str[i++] == '.') {
-      flag = 1;
-      break;
-    }
-  }
+  //unsigned int i = 0;
+  //bool flag = 0;
+  //while (i < 20 && str[i] != 0) {
+  //  if (str[i++] == '.') {
+  //    flag = 1;
+  //    break;
+  //  }
+  //}
   char * n=NULL;
-  if (flag) {
-    //sscanf(str, "%f", &(elem->elem.f));
-    
+  //if (flag) {
+  //  //sscanf(str, "%f", &(elem->elem.f));
+  //  
     elem->elem.f=strtof(str,n);
     elem->type = FLOAT_T;
-  } else {
+ /* } else {
     elem->elem.i = strtod(str,n);
     elem->type = INTEGER_T;
-  }
+  }*/
 
   return OK;
 
@@ -217,10 +225,10 @@ Status do_judge(ElemType e, LinerStack *suffix_p, LinerStack *optr_p) {
         PushStack(optr_p, e);
 
       } else {
-        //栈内操作符优先级较低或相等
+        //操作符优先级较低或相等
 
         while (1) {
-          if (optr_p->size != 0) {
+          if ((optr_p->size != 0) && GetTop(optr_p).elem.op != '('){
             PopStack(optr_p, &top);
             PushStack(suffix_p, top);
 
@@ -313,6 +321,7 @@ Status Operate(LinerStack *suffix_p, ElemType *ret) {
     ret->type = FLOAT_T;
     ret->elem.f = ret->elem.i;
   }
+  return OK;
 }
 void PrintWelcome() {
   printf("Supported functions:\n");
