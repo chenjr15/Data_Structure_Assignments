@@ -26,7 +26,7 @@ Status PopStack(LinerStack* S, SElemType* data){
     *data = S->base[--(S->size)];
 	return OK;
 }
-ElemType GetTop(LinerStack* S){
+SElemType GetTop(LinerStack* S){
 	if (!S) return 0;
 	if(S->size == 0)return 0;
 	
@@ -41,7 +41,7 @@ void ShowStack(LinerStack* S,unsigned int limit){
         len = S->size;
     printf("\n[ len:%d ]\n",S->size);
 	while(len){
-    printf("%c ",S->base[--len]);
+    printf("%c ",(int)S->base[--len]);
 		putchar('\n');
 	}
 	printf("[ end ]\n");

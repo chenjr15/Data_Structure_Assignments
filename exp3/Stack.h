@@ -11,7 +11,7 @@
 Status InitStack(LinerStack* S);
 Status PushStack(LinerStack* S, SElemType data);
 Status PopStack(LinerStack* S, SElemType* data);
-ElemType GetTop(LinerStack* S);
+SElemType GetTop(LinerStack* S);
 void ShowStack(LinerStack* S,unsigned int limit);
 
 #endif
