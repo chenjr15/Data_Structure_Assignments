@@ -67,7 +67,24 @@ Status PostTraverse_R(BinTree* bt) {
 
 Status PreTraverse(BinTree * bt) {
   if (!bt) return INVALID_ARGUMENT;
-
+  LinerStack S;
+  LinerStack* pS = &S;
+  InitStack(pS);
+ 
+  while (!isStackEmpty(pS) || bt) {
+    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
+    while (bt) {
+    Visit(bt);
+      PushStack(pS, bt);
+      bt = bt->L;
+    }
+    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
+    if (!isStackEmpty(pS)) {
+      PopStack(pS, &bt);
+      
+      bt = bt->R;
+    }
+  }
   return OK;
 }
 
@@ -79,12 +96,12 @@ Status InTraverse(BinTree * bt) {
   InitStack(pS);
  
   while (!isStackEmpty(pS) || bt) {
-    /*�����ڵ���ѹջ��Ȼ��ָ��ָ��������������ѭ��ֱ��������Ϊ��*/
+    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
     while (bt) {
       PushStack(pS, bt);
       bt = bt->L;
     }
-    /*������ѭ����ϣ���ջ-ȡ�����ѹ��Ľڵ㣬Ȼ����ʹ��ָ���Լ���������*/
+    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
     if (!isStackEmpty(pS)) {
       PopStack(pS, &bt);
       Visit(bt);
@@ -95,7 +112,53 @@ Status InTraverse(BinTree * bt) {
 }
 
 Status PostTraverse(BinTree * bt) {
-  if (!bt) return INVALID_ARGUMENT;
+ if (!bt) return INVALID_ARGUMENT;
+  LinerStack S,F;
+  LinerStack* pS = &S;
+  LinerStack* pF = &F;
+  BinTree * father=NULL;
+  InitStack(pS);
+  InitStack(pF);
+ 
+  while (!isStackEmpty(pS) || bt) {
+    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
+    while (bt) {
+      PushStack(pS, bt);
+      bt = bt->L;
+    }
+    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
+    if (!isStackEmpty(pS)) {
+    	
+      PopStack(pS, &bt);
+      
+      father = bt;
+      if (father->L || father->R)
+        PushStack(pF, father);
+      else
+        Visit(bt);
+      
+      if (!bt->R) {
+        //to the end of right
+        while (father = GetTop(pF))
+        {
+          if (father->R != bt) break;
+          if (OK == PopStack(pF, &father)) {
+            Visit(father);
+            bt = father;
+          }
+            
+        }//while
+        bt = NULL;
+
+      }//if
+      else
+      bt = bt->R;
+      
+      
+    }
+	
+    
+  }
   return OK;
 }
 

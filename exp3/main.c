@@ -21,13 +21,40 @@ int main(void) {
   root->L->R->R->R = CreateBT("d");
   root->R->L = CreateBT("e");
   root->R->R = CreateBT("f");
-
+  printf("递归前序：\n");
   PreTraverse_R(bt);
   putchar('\n');
+  putchar('\n');
+
+  printf("递归中序：\n");
   InTraverse_R(bt);
   putchar('\n');
-  PostTraverse_R(bt);
   putchar('\n');
+
+  printf("递归后序：\n");
+  PostTraverse_R(bt);
+  putchar('\n');   
+  putchar('\n');
+
+
+   printf("非递归前序：\n");
   InTraverse(bt);
+  putchar('\n');
+  putchar('\n');
+
+  
+  printf("非递归中序：\n");
+  PreTraverse(bt);
+  putchar('\n');
+  putchar('\n');
+
+
+  printf("非递归后序：\n");
+  PostTraverse(bt);
+  putchar('\n');
+  putchar('\n');
+
+
+  getchar();
   return OK;
 }
