@@ -139,7 +139,7 @@ Status PostTraverse(BinTree * bt) {
       
       if (!bt->R) {
         //to the end of right
-        while (father = GetTop(pF))
+        while ((father = GetTop(pF)))
         {
           if (father->R != bt) break;
           if (OK == PopStack(pF, &father)) {
