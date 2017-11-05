@@ -146,7 +146,8 @@ Status PostTraverse(BinTree * bt) {
         Visit(bt);
       //to the end of right
       if (!bt->R) {
-        while (father = GetTop(pF))
+        //to the end of right
+        while ((father = GetTop(pF)))
         {
           //if father 
           if (father->R != bt) break;
