@@ -51,10 +51,9 @@ int main(void) {
 
   printf("非递归后序：\n");
   PostTraverse(bt);
-  putchar('\n');
-  putchar('\n');
 
 
+  DestoryBT(bt);
   getchar();
   return OK;
 }
