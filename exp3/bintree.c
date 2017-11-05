@@ -29,6 +29,12 @@ BinTree * CreateBT(ElemType * data) {
 }
 Status DestoryBT(BinTree* bt) {
   if (!bt) return INVALID_ARGUMENT;
+  if (bt->L)
+    DestoryBT(bt->L);
+
+  if (bt->R)
+    DestoryBT(bt->R);
+  free(bt);
   return OK;
 
 }
@@ -126,22 +132,25 @@ Status PostTraverse(BinTree * bt) {
       PushStack(pS, bt);
       bt = bt->L;
     }
-    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
+   
     if (!isStackEmpty(pS)) {
     	
       PopStack(pS, &bt);
       
       father = bt;
       if (father->L || father->R)
+        //not a leaf node,push it  into father stack
         PushStack(pF, father);
       else
+        //leaf node, visit it 
         Visit(bt);
-      
+      //to the end of right
       if (!bt->R) {
-        //to the end of right
         while (father = GetTop(pF))
         {
+          //if father 
           if (father->R != bt) break;
+          
           if (OK == PopStack(pF, &father)) {
             Visit(father);
             bt = father;
