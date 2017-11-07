@@ -36,12 +36,12 @@ long akm_w(int m,int n){
 	do{
 		while(s[top].m){
 			while(s[top].n){
-			top++;
-			s[top].m=s[top-1].m;
-			s[top].n=s[top-1].n-1;
+				top++;
+				s[top].m=s[top-1].m;
+				s[top].n=s[top-1].n-1;
 			}//n
-		s[top].m--;
-		s[top].n = 1;
+			s[top].m--;
+			s[top].n = 1;
 		}//m
 		if(top>0){
 			top--;
