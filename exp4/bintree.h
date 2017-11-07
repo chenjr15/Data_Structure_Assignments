@@ -14,5 +14,6 @@ Status InTraverse(BinTree* bt);
 Status PostTraverse(BinTree* bt);
 
 Status LevelTraverse(BinTree * bt);
-Status GetWidth(BinTree *root,unsigned int * width);
+Status GetMaxWidth(BinTree *root, unsigned int *width,unsigned int *level_no);
+Status PrintLevelAt(BinTree *root, unsigned int level);
 #endif // !__BIN_TREE_H__

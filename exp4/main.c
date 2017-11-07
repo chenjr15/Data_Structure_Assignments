@@ -23,9 +23,10 @@ int main(void) {
 
   LevelTraverse(bt);
   putchar('\n');
-  unsigned int w =0;
-  GetWidth(bt,&w);
-  printf("Width %u\n",w);
+  unsigned int w =0,maxno =0;
+  GetMaxWidth(bt,&w,&maxno);
+  printf("Max width is %u, at level %u \n",w,maxno);
+  PrintLevelAt(bt,maxno);
   DestoryBT(bt);
   getchar();
   return OK;

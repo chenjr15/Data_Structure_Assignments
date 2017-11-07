@@ -5,48 +5,86 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Queue.h"
+Status PrintLevelAt(BinTree *root, unsigned int level){
+    //parameter checking
+    if (!root) return INVALID_ARGUMENT;
+    BinTree *bt = root;
+    deque q;
+    //counters of numbers of nodes
+    int Next_Level_Cnt = 0, This_Level_Cnt = 1;
+    //level counters
+    int level_now = 0, max_level=0;
+    InitDeque(&q, DEQUE_LEN);
+    while (q.len || bt)
+    {
+      level_now++;
+      for (int i = 0; i < This_Level_Cnt; i++)
+      {
+        
+        if(level == level_now )Visit(bt);
+        if (bt->L)
+        {
+          EnDeque(&q, &(bt->L));
+          Next_Level_Cnt++;
+        }
+        if (bt->R)
+        {
+          EnDeque(&q, &(bt->R));
+          Next_Level_Cnt++;
+        }
+        if (OK != DeDeque(&q, &bt))
+          bt = NULL;
+      }
 
-//create
-//destory
-//pre t
-//post t
-//in t
-//visit
-Status GetWidth(BinTree *root,unsigned int * width)
+  
+      This_Level_Cnt = Next_Level_Cnt;
+      Next_Level_Cnt = 0;
+    }
+    DestoryDeque(&q);
+    return OK;
+}
+
+
+Status GetMaxWidth(BinTree *root, unsigned int *width, unsigned int *level_no)
 {
-  if (!root)
-    return INVALID_ARGUMENT;
+  //parameter checking
+  if (!root) return INVALID_ARGUMENT;
   BinTree *bt = root;
-  deque q,q_MAX;
-  int NextLevelCount = 0, ThisLevelCount = 1,MaxLevelCount=0;
+  deque q;
+  //counters of numbers of nodes
+  int Next_Level_Cnt = 0, This_Level_Cnt = 1, Max_Level_Cnt = 0;
+  //level counters
+  int level = 0, max_level=0;
   InitDeque(&q, DEQUE_LEN);
   while (q.len || bt)
   {
-    
-    for (int i = 0; i < ThisLevelCount; i++)
+    level++;
+    for (int i = 0; i < This_Level_Cnt; i++)
     {
+      
       if (bt->L)
       {
         EnDeque(&q, &(bt->L));
-        NextLevelCount++;
+        Next_Level_Cnt++;
       }
       if (bt->R)
       {
         EnDeque(&q, &(bt->R));
-        NextLevelCount++;
+        Next_Level_Cnt++;
       }
       if (OK != DeDeque(&q, &bt))
         bt = NULL;
     }
-    MaxLevelCount = MAX(MaxLevelCount,ThisLevelCount);
-    if(ThisLevelCount>MaxLevelCount){
-      
-    }
-    ThisLevelCount = NextLevelCount;
-    NextLevelCount =0;
+    if (This_Level_Cnt > Max_Level_Cnt)
+      max_level = level;
+    Max_Level_Cnt = MAX(Max_Level_Cnt, This_Level_Cnt);
+
+    This_Level_Cnt = Next_Level_Cnt;
+    Next_Level_Cnt = 0;
   }
   DestoryDeque(&q);
-  *width = MaxLevelCount;
+  *width = Max_Level_Cnt;
+  *level_no = max_level;
   return OK;
 }
 
