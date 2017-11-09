@@ -4,7 +4,7 @@
 #include "string.h"
 #include "stdio.h"
 
-Status InitDeque(deque *D, int len)
+Status InitQueue(queue *D, int len)
 {
 	if (D == NULL)
 		return INVALID_ARGUMENT;
@@ -13,13 +13,13 @@ Status InitDeque(deque *D, int len)
 	D->head = 0;
 	D->rear = 0;
 	D->len = 0;
-} //InitDeque
+} //InitQueue
 
-Status EnDeque(deque *D, const SElemType *data)
+Status EnQueue(queue *D, const SElemType *data)
 {
 	if (D == NULL || data == NULL)
 		return INVALID_ARGUMENT;
-	if (D->len == DEQUE_LEN)
+	if (D->len == QUEUE_LEN)
 		return OVERFLOW;
 	if (D->len == 0)
 		HEAD(D) = *data;
@@ -27,9 +27,9 @@ Status EnDeque(deque *D, const SElemType *data)
 		GET(D, FORWARD(D->head)) = *data;
 	(D->len)++;
 	return OK;
-} //EnDeque
+} //EnQueue
 
-Status DeDeque(deque *D, SElemType *data)
+Status DeQueue(queue *D, SElemType *data)
 {
 	if (D == NULL || data == NULL)
 		return INVALID_ARGUMENT;
@@ -43,20 +43,20 @@ Status DeDeque(deque *D, SElemType *data)
 	if(D->len == 0)
 		D->head = D->rear;
 	return OK;
-} //DeDeque
+} //DeQueue
 
-void OutputDeque(deque *D)
+void OutputQueue(queue *D)
 {
 	int i;
-	for (i = 0; i < DEQUE_LEN; i++)
+	for (i = 0; i < QUEUE_LEN; i++)
 	{
 		printf("%2d ", GET(D, i));
 	}
 	putchar('\n');
 	printf("len:%d", D->len);
 	putchar('\n');
-} //OutputDeque
-Status DestoryDeque(deque *D)
+} //OutputQueue
+Status DestoryQueue(queue *D)
 {
 	if (D == NULL)
 		return INVALID_ARGUMENT;
@@ -68,4 +68,4 @@ Status DestoryDeque(deque *D)
 	D->rear = 0;
 	D->len = 0;
 	return OK;
-} //DestoryDeque
+} //DestoryQueue

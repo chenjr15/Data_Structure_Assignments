@@ -1,20 +1,26 @@
 #include "common.h"
-#include "Stack.h"
 #include "bintree.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "Queue.h"
+/** 
+ * @brief  Print nodes at level [level]
+ * @note   
+ * @param  *root: root pointer of binary tree
+ * @param  level: level number
+ * @retval 
+ */
 Status PrintLevelAt(BinTree *root, unsigned int level){
     //parameter checking
     if (!root) return INVALID_ARGUMENT;
     BinTree *bt = root;
-    deque q;
+    queue q;
     //counters of numbers of nodes
     int Next_Level_Cnt = 0, This_Level_Cnt = 1;
     //level counters
     int level_now = 0, max_level=0;
-    InitDeque(&q, DEQUE_LEN);
+    InitQueue(&q, QUEUE_LEN);
     while (q.len || bt)
     {
       level_now++;
@@ -24,15 +30,15 @@ Status PrintLevelAt(BinTree *root, unsigned int level){
         if(level == level_now )Visit(bt);
         if (bt->L)
         {
-          EnDeque(&q, &(bt->L));
+          EnQueue(&q, &(bt->L));
           Next_Level_Cnt++;
         }
         if (bt->R)
         {
-          EnDeque(&q, &(bt->R));
+          EnQueue(&q, &(bt->R));
           Next_Level_Cnt++;
         }
-        if (OK != DeDeque(&q, &bt))
+        if (OK != DeQueue(&q, &bt))
           bt = NULL;
       }
 
@@ -40,22 +46,29 @@ Status PrintLevelAt(BinTree *root, unsigned int level){
       This_Level_Cnt = Next_Level_Cnt;
       Next_Level_Cnt = 0;
     }
-    DestoryDeque(&q);
+    DestoryQueue(&q);
     return OK;
 }
 
-
+/** 
+ * @brief  Get max witdth of a binary tree
+ * @note   
+ * @param  *root: 
+ * @param  *width: pointer to save the max width 
+ * @param  *level_no: pointer to save the level number with max width
+ * @retval 
+ */
 Status GetMaxWidth(BinTree *root, unsigned int *width, unsigned int *level_no)
 {
   //parameter checking
   if (!root) return INVALID_ARGUMENT;
   BinTree *bt = root;
-  deque q;
+  queue q;
   //counters of numbers of nodes
   int Next_Level_Cnt = 0, This_Level_Cnt = 1, Max_Level_Cnt = 0;
   //level counters
   int level = 0, max_level=0;
-  InitDeque(&q, DEQUE_LEN);
+  InitQueue(&q, QUEUE_LEN);
   while (q.len || bt)
   {
     level++;
@@ -64,15 +77,15 @@ Status GetMaxWidth(BinTree *root, unsigned int *width, unsigned int *level_no)
       
       if (bt->L)
       {
-        EnDeque(&q, &(bt->L));
+        EnQueue(&q, &(bt->L));
         Next_Level_Cnt++;
       }
       if (bt->R)
       {
-        EnDeque(&q, &(bt->R));
+        EnQueue(&q, &(bt->R));
         Next_Level_Cnt++;
       }
-      if (OK != DeDeque(&q, &bt))
+      if (OK != DeQueue(&q, &bt))
         bt = NULL;
     }
     if (This_Level_Cnt > Max_Level_Cnt)
@@ -82,7 +95,7 @@ Status GetMaxWidth(BinTree *root, unsigned int *width, unsigned int *level_no)
     This_Level_Cnt = Next_Level_Cnt;
     Next_Level_Cnt = 0;
   }
-  DestoryDeque(&q);
+  DestoryQueue(&q);
   *width = Max_Level_Cnt;
   *level_no = max_level;
   return OK;
@@ -93,20 +106,20 @@ Status LevelTraverse(BinTree *root)
   if (!root)
     return INVALID_ARGUMENT;
   BinTree *bt = root;
-  deque q;
-  InitDeque(&q, DEQUE_LEN);
+  queue q;
+  InitQueue(&q, QUEUE_LEN);
   while (q.len || bt)
   {
 
     Visit(bt);
     if (bt->L)
-      EnDeque(&q, &(bt->L));
+      EnQueue(&q, &(bt->L));
     if (bt->R)
-      EnDeque(&q, &(bt->R));
-    if (OK != DeDeque(&q, &bt))
+      EnQueue(&q, &(bt->R));
+    if (OK != DeQueue(&q, &bt))
       bt = NULL;
   }
-  DestoryDeque(&q);
+  DestoryQueue(&q);
   return OK;
 }
 
@@ -143,6 +156,16 @@ Status DestoryBT(BinTree *bt)
   return OK;
 }
 
+// BinTree *MakeBT(const char * str){
+//   char *pchar = str;
+//   char c;
+//   BinTree* root = 
+//   while((c = *pchar++)){
+    
+//   }
+
+// }
+
 Status PreTraverse_R(BinTree *bt)
 {
   if (!bt)
@@ -178,120 +201,5 @@ Status PostTraverse_R(BinTree *bt)
   if (bt->R)
     PostTraverse_R(bt->R);
   Visit(bt);
-  return OK;
-}
-
-Status PreTraverse(BinTree *bt)
-{
-  if (!bt)
-    return INVALID_ARGUMENT;
-  LinerStack S;
-  LinerStack *pS = &S;
-  InitStack(pS);
-
-  while (!isStackEmpty(pS) || bt)
-  {
-    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
-    while (bt)
-    {
-      Visit(bt);
-      PushStack(pS, bt);
-      bt = bt->L;
-    }
-    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
-    if (!isStackEmpty(pS))
-    {
-      PopStack(pS, &bt);
-
-      bt = bt->R;
-    }
-  }
-  return OK;
-}
-
-Status InTraverse(BinTree *bt)
-{
-
-  if (!bt)
-    return INVALID_ARGUMENT;
-  LinerStack S;
-  LinerStack *pS = &S;
-  InitStack(pS);
-
-  while (!isStackEmpty(pS) || bt)
-  {
-    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
-    while (bt)
-    {
-      PushStack(pS, bt);
-      bt = bt->L;
-    }
-    /*左子树循环完毕，出栈-取出最后压入的节点，然后再使他指向自己的右子树*/
-    if (!isStackEmpty(pS))
-    {
-      PopStack(pS, &bt);
-      Visit(bt);
-      bt = bt->R;
-    }
-  }
-  return OK;
-}
-
-Status PostTraverse(BinTree *bt)
-{
-  if (!bt)
-    return INVALID_ARGUMENT;
-  LinerStack S, F;
-  LinerStack *pS = &S;
-  LinerStack *pF = &F;
-  BinTree *father = NULL;
-  InitStack(pS);
-  InitStack(pF);
-
-  while (!isStackEmpty(pS) || bt)
-  {
-    /*碰到节点先压栈，然后将指针指向他的左子树，循环直至左子树为空*/
-    while (bt)
-    {
-      PushStack(pS, bt);
-      bt = bt->L;
-    }
-
-    if (!isStackEmpty(pS))
-    {
-
-      PopStack(pS, &bt);
-
-      father = bt;
-      if (father->L || father->R)
-        //not a leaf node,push it  into father stack
-        PushStack(pF, father);
-      else
-        //leaf node, visit it
-        Visit(bt);
-      //to the end of right
-      if (!bt->R)
-      {
-        //to the end of right
-        while ((father = GetTop(pF)))
-        {
-          //if father
-          if (father->R != bt)
-            break;
-
-          if (OK == PopStack(pF, &father))
-          {
-            Visit(father);
-            bt = father;
-          }
-
-        } //while
-        bt = NULL;
-
-      } //if
-      else
-        bt = bt->R;
-    }
-  }
   return OK;
 }

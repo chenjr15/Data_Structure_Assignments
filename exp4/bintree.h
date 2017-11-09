@@ -8,10 +8,7 @@ Status DestoryBT(BinTree* bt);
 Status PreTraverse_R(BinTree* bt);
 Status InTraverse_R(BinTree* bt);
 Status PostTraverse_R(BinTree* bt);
-
-Status PreTraverse(BinTree* bt);
-Status InTraverse(BinTree* bt);
-Status PostTraverse(BinTree* bt);
+// BinTree *MakeBT(const char * str);
 
 Status LevelTraverse(BinTree * bt);
 Status GetMaxWidth(BinTree *root, unsigned int *width,unsigned int *level_no);

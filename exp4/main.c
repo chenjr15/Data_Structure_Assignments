@@ -1,4 +1,3 @@
-#include "Stack.h"
 #include "bintree.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +9,7 @@ int main(void) {
   ElemType c;
   root = CreateBT("-");
   bt = root;
+  //build tree forcibly                
   root->L = CreateBT("+");
   root->R = CreateBT("/");
   root->L->L = CreateBT("a");
@@ -24,6 +24,7 @@ int main(void) {
   LevelTraverse(bt);
   putchar('\n');
   unsigned int w =0,maxno =0;
+//get max width 
   GetMaxWidth(bt,&w,&maxno);
   printf("Max width is %u, at level %u \n",w,maxno);
   PrintLevelAt(bt,maxno);
