@@ -1,0 +1,11 @@
+objects = main.o MGraph.o 
+CC= clang
+CFLAGS += --std=c99 -Wall -Werror -Wno-unused
+Program = GraphTest
+$(Program): $(objects)
+		$(CC) $(CFLAGS) -o $(Program) $(objects)
+main.o : main.c  MGraph.h common.h 
+MGraph.o : MGraph.h common.h 
+.PHONY : clean
+clean:
+	rm $(Program) $(objects)
