@@ -30,3 +30,6 @@ Status AddRelation(LGraph *g, int v1_index, int v2_index);
 Status IsRelated(LGraph *g, Edge e);
 Status BuildGraph(LGraph *g, FILE *f);
 Status InitGraph(LGraph *g, unsigned num, GraphKind t);
+Status SimplePrint(Graph* g);
+Status DestoryGraph(LGraph* g );
+Status DFS(LGraph * g,int start,int* visited);

@@ -83,3 +83,48 @@ Status InsertEdge(LGraph *g, Edge e){
   (g->arcnum)+=flag;
   return OK;
 }
+Status SimplePrint(Graph* g){
+  if (g == NULL)
+    return INVALID_ARGUMENT;
+  ArcNode* p=NULL;
+  printf("V: %d,E: %d\n",g->vexnum,g->arcnum);
+  for (int i =0;i<MAX_VERTEX_NUM;i++){
+    p = g->vertices[i].first;
+    if(!p) break;
+    printf("[%c]->",i+'A');
+    while(p){
+      printf("%c->",p->vexindex+'A');
+      p=p->next;
+    }
+    printf(" |\n");
+  }
+  return OK;
+}
+Status DestoryGraph(LGraph*g ){
+  if (g == NULL)
+    return INVALID_ARGUMENT;
+  ArcNode* p = g->vertices[0].first;
+  ArcNode* next=NULL;
+  while(p){
+    next = p->next;
+    free(p);
+    p = next;
+  }
+  return OK;
+}
+Status DFS(LGraph * g,int start,int* visited){
+  if (g == NULL)
+    return INVALID_ARGUMENT;
+  if(visited[start])return OK;
+    visited[start]=1;
+  ArcNode* p = g->vertices[start].first;
+  if(!p) return ERROR;
+
+  printf("[%c]->",start+'A');
+  while(p){
+    
+    DFS(g,p->vexindex,visited);
+    p=p->next;
+  }
+  return OK;
+}
