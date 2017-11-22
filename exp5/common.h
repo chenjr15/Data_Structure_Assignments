@@ -23,12 +23,28 @@ typedef struct bintree
   struct bintree *L;
   struct bintree *R;
 } BinTree;
-typedef BinTree *SElemType;
+
+typedef struct edge{
+  int v1,v2;
+}Edge;
+
+typedef Edge*  SElemType;
+
 
 typedef struct
 {
   SElemType base[STACK_INIT_LEN];
   unsigned int size;
 } LinerStack;
+
+typedef struct{
+	SElemType	*data;
+	int head;
+	int rear;
+	int len;
+	
+}queue;
+
+
 
 #endif // !__COMMON_H__

@@ -19,9 +19,11 @@ typedef struct {
   int vexnum,arcnum;
   int kind;
 }LGraph;
-typedef struct edge{
-  int v1,v2;
-}Edge;
+
+// typedef struct edge{
+//   int v1,v2;
+// }Edge;
+
 typedef LGraph Graph;
 
 
@@ -32,4 +34,4 @@ Status BuildGraph(LGraph *g, FILE *f);
 Status InitGraph(LGraph *g, unsigned num, GraphKind t);
 Status SimplePrint(Graph* g);
 Status DestoryGraph(LGraph* g );
-Status DFS(LGraph * g,int start,int* visited);
+Status DFS(LGraph * g,int start,int* visited,queue* q);
