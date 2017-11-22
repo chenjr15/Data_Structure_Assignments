@@ -1,12 +1,13 @@
-objects = main.o LGraph.o 
-CC= gcc
+objects = main.o LGraph.o Queue.o
+#CC= gcc
 CFLAGS += --std=c99 -Wall -Wno-unused
-CFLAGS += --sysroot=/data/data/com.termux/files/usr/
+
 Program = GraphTest
 $(Program): $(objects)
 		$(CC) $(CFLAGS) -o $(Program) $(objects)
 main.o : main.c  LGraph.h common.h 
 LGraph.o : LGraph.h common.h 
+Queue.o: common.h Queue.h
 .PHONY : cleans
 clean:
 	rm $(Program) $(objects)
