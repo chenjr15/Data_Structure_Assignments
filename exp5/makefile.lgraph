@@ -1,6 +1,7 @@
 objects = main.o LGraph.o 
-CC= clang
-CFLAGS += --std=c99 -Wall -Werror -Wno-unused
+CC= gcc
+CFLAGS += --std=c99 -Wall -Wno-unused
+CFLAGS += --sysroot=/data/data/com.termux/files/usr/
 Program = GraphTest
 $(Program): $(objects)
 		$(CC) $(CFLAGS) -o $(Program) $(objects)
