@@ -45,13 +45,22 @@ Status DeQueue(queue *D, SElemType *data)
 		D->head = D->rear;
 	return OK;
 } //DeQueue
+Status IsInQueue(queue* Q,SElemType* data){
+	if(Q==NULL||data==NULL)
+	return INVALID_ARGUMENT;
+	if (Q->len == 0)return FALSE;
+	if(Q->len==1) return (Q->data[Q->head]==*data);
+	int i;
+	for (i = Q->head; i < Q->rear&&(Q->data[i]!=*data); i++);
+	return (i != Q->rear);
+}
 
 void OutputQueue(queue *D)
 {
 	int i;
 	for (i = 0; i < QUEUE_LEN; i++)
 	{
-		printf("%2d ", GET(D, i));
+		printf("%p ", GET(D, i));
 	}
 	putchar('\n');
 	printf("len:%d", D->len);

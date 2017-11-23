@@ -72,5 +72,5 @@ typedef struct{
 #define CLEAR                "\e[2J"
 #define CLRLINE              "\r\e[K" //or "\e[1K\r"
 
-#define FONT_COLOR L_GREEN
+#define FONT_COLOR L_CYAN
 #endif // !__COMMON_H__

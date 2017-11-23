@@ -20,7 +20,7 @@ int main(void)
       0,
   };
   queue Q_Edge;
-  Edge *edgeptr = NULL;
+  
   InitQueue(&Q_Edge, QUEUE_LEN);
   while ((c = getchar()) != EOF)
   {
@@ -34,27 +34,21 @@ int main(void)
     memset(visited, 0, sizeof(int) * MAX_VERTEX_NUM);
     /****************Start of DFS****************************/
     //DFS
-    printf("DFS:");
+    printf("DFS:\n");
     DFS(&g, c - 'A', visited, &Q_Edge);
     //print the end of DFS
     printf(" |\n");
     //output the edge set in the queue.
-    while (DeQueue(&Q_Edge, &edgeptr) == OK)
-    {
-      printf("(%c,%c), ", edgeptr->v1 + 'A', edgeptr->v2 + 'A');
-      //free the memory of each queue node
-      if (edgeptr)
-        free(edgeptr);
-    }
-    putchar('\n');
+    PrintEdgeQueue(&Q_Edge);
     DestoryQueue(&Q_Edge);
     /***************End of DFS*********************************/
     InitQueue(&Q_Edge, QUEUE_LEN);
     /****************Start of BFS****************************/
     memset(visited, 0, sizeof(int) * MAX_VERTEX_NUM);
-    printf("BFS:");
+    printf("BFS:\n");
     BFS(&g, c - 'A', visited, &Q_Edge);
     printf(" |\n");
+    PrintEdgeQueue(&Q_Edge);
     /***************End of DFS*********************************/
   }
   DestoryQueue(&Q_Edge);
