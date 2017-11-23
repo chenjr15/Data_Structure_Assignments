@@ -4,8 +4,7 @@
 #include <ctype.h>
 #include "LGraph.h"
 #include "Queue.h"
-int main(void)
-{
+int main(void) {
   Graph g;
   int num;
   FILE *f = fopen("edges.txt", "r");
@@ -17,17 +16,15 @@ int main(void)
   SimplePrint(&g);
   int c = 0;
   int visited[MAX_VERTEX_NUM] = {
-      0,
+    0,
   };
   queue Q_Edge;
-  
+
   InitQueue(&Q_Edge, QUEUE_LEN);
-  while ((c = getchar()) != EOF)
-  {
+  while ((c = getchar()) != EOF) {
     if (!isupper(c))
       continue;
-    if (!g.vertices[c - 'A'].first)
-    {
+    if (!g.vertices[c - 'A'].first) {
       printf("[%c] is not in the graph.\n", c);
       continue;
     }

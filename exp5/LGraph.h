@@ -46,7 +46,7 @@ Status BFS(LGraph *g, int start, int *visited, queue *q_edge);
 Status PrintEdgeQueue(queue *Q_EdgePtr);
 Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2);
 
-//#define COLORTEXT
+//
 #ifdef COLORTEXT
 #define OUTPUT_VERTIX(ch) printf("[" FONT_COLOR "%c" NONE "]->", (ch) + 'A')
 #define OUTPUT_EDGE(edgeptr) printf("(" FONT_COLOR "%c" NONE "," FONT_COLOR "%c" NONE "), ", \
