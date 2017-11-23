@@ -13,6 +13,7 @@ Status InitQueue(queue *D, int len)
 	D->head = 0;
 	D->rear = 0;
 	D->len = 0;
+	return OK;
 } //InitQueue
 
 Status EnQueue(queue *D, const SElemType *data)

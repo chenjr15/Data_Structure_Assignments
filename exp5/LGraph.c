@@ -25,7 +25,7 @@ Status BuildGraph(LGraph *g, FILE *f)
   while (!feof(f))
   {
 
-    fscanf(f, "%c%c,", &e.v1, &e.v2);
+    fscanf(f, "%lc%lc,", &e.v1, &e.v2);
 
     if (isupper(e.v1) && isupper(e.v2))
     {
@@ -110,10 +110,10 @@ Status SimplePrint(Graph *g)
     p = g->vertices[i].first;
     if (!p)
       break;
-    printf("[%c]->", i + 'A');
+    OUTPUT_VERTIX(i);
     while (p)
     {
-      printf("%c->", p->vexindex + 'A');
+      OUTPUT_VERTIX(p->vexindex);
       p = p->next;
     }
     printf(" |\n");
@@ -136,7 +136,7 @@ Status DestoryGraph(LGraph *g)
 }
 Status DFS(LGraph *g, int start, int *visited, queue *q)
 {
-  if (g == NULL)
+  if (g == NULL || visited == NULL || q == NULL)
     return INVALID_ARGUMENT;
   if (visited[start])
     return OK;
@@ -145,24 +145,59 @@ Status DFS(LGraph *g, int start, int *visited, queue *q)
   Edge *e = NULL;
   if (!p)
     return ERROR;
-  
-  printf("[%c]->", start + 'A');
+  //print nodes here
+  OUTPUT_VERTIX(start);
+  //add edges into edge set (queue)
   while (p)
   {
     if (visited[p->vexindex] == 0)
-  {
-    e = malloc(sizeof(ArcNode));
-    if (e)
     {
-      e->v1 = start;
-      e->v2 = p->vexindex;
-      EnQueue(q, &e);
+      e = malloc(sizeof(ArcNode));
+      if (e)
+      {
+        e->v1 = start;
+        e->v2 = p->vexindex;
+        EnQueue(q, &e);
+      }
+      else
+        printf("malloc failed!\n");
     }
-    else
-      printf("malloc failed!\n");
-  }
     DFS(g, p->vexindex, visited, q);
     p = p->next;
   }
+  return OK;
+}
+
+Status BFS(LGraph *g, int start, int *visited, queue *q_edge)
+{
+  if (g == NULL || visited == NULL || q_edge == NULL)
+    return INVALID_ARGUMENT;
+  ArcNode first;
+  ArcNode *first_p = &first;
+  ArcNode *arc_ptr = NULL;
+  queue q_arcnode;
+  InitQueue(&q_arcnode, QUEUE_LEN);
+  arc_ptr = g->vertices[start].first;
+  if (!arc_ptr)
+    return ERROR;
+  first.vexindex = start;
+  first.next = g->vertices[start].first;
+  EnQueue(&q_arcnode, &first_p);
+  while (DeQueue(&q_arcnode, &arc_ptr) == OK)
+  {
+    if (visited[arc_ptr->vexindex] == FALSE)
+    {
+      OUTPUT_VERTIX(arc_ptr->vexindex);
+      visited[arc_ptr->vexindex] = TRUE;
+    }
+    arc_ptr = g->vertices[arc_ptr->vexindex].first;
+    while (arc_ptr)
+    {
+      if (visited[arc_ptr->vexindex] == FALSE)
+        EnQueue(&q_arcnode, &arc_ptr);
+      arc_ptr = arc_ptr->next;
+    }
+  }
+  DestoryQueue(&q_arcnode);
   return OK;
 }

@@ -19,28 +19,45 @@ int main(void)
   int visited[MAX_VERTEX_NUM] = {
       0,
   };
-  queue q;
-  Edge* edgeptr=NULL;
-  InitQueue(&q,QUEUE_LEN);
+  queue Q_Edge;
+  Edge *edgeptr = NULL;
+  InitQueue(&Q_Edge, QUEUE_LEN);
   while ((c = getchar()) != EOF)
   {
-    if (isupper(c))
+    if (!isupper(c))
+      continue;
+    if (!g.vertices[c - 'A'].first)
     {
-      memset(visited, 0, sizeof(int) * MAX_VERTEX_NUM);
-      if (DFS(&g, c - 'A', visited, &q) == OK)
-      {
-        printf(" |\n");
-        while(DeQueue(&q,&edgeptr)==OK){
-          printf("(%c,%c), ",edgeptr->v1+'A',edgeptr->v2+'A');
-          if(edgeptr) free(edgeptr);
-        }
-        putchar('\n');
-      }
-    else {
       printf("[%c] is not in the graph.\n", c);
+      continue;
     }
+    memset(visited, 0, sizeof(int) * MAX_VERTEX_NUM);
+    /****************Start of DFS****************************/
+    //DFS
+    printf("DFS:");
+    DFS(&g, c - 'A', visited, &Q_Edge);
+    //print the end of DFS
+    printf(" |\n");
+    //output the edge set in the queue.
+    while (DeQueue(&Q_Edge, &edgeptr) == OK)
+    {
+      printf("(%c,%c), ", edgeptr->v1 + 'A', edgeptr->v2 + 'A');
+      //free the memory of each queue node
+      if (edgeptr)
+        free(edgeptr);
     }
+    putchar('\n');
+    DestoryQueue(&Q_Edge);
+    /***************End of DFS*********************************/
+    InitQueue(&Q_Edge, QUEUE_LEN);
+    /****************Start of BFS****************************/
+    memset(visited, 0, sizeof(int) * MAX_VERTEX_NUM);
+    printf("BFS:");
+    BFS(&g, c - 'A', visited, &Q_Edge);
+    printf(" |\n");
+    /***************End of DFS*********************************/
   }
+  DestoryQueue(&Q_Edge);
   DestoryGraph(&g);
   printf("Done!\nPress Enter to exit.");
   getchar();

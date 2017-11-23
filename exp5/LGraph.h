@@ -25,7 +25,7 @@ typedef struct {
 // }Edge;
 
 typedef LGraph Graph;
-
+#define OUTPUT_VERTIX(ch) printf("["FONT_COLOR"%c"NONE"]->", (ch) + 'A')
 
 Status InsertEdge(LGraph *g, Edge e);
 Status AddRelation(LGraph *g, int v1_index, int v2_index);
@@ -35,3 +35,4 @@ Status InitGraph(LGraph *g, unsigned num, GraphKind t);
 Status SimplePrint(Graph* g);
 Status DestoryGraph(LGraph* g );
 Status DFS(LGraph * g,int start,int* visited,queue* q);
+Status BFS(LGraph *g, int start, int *visited, queue *q_edge);
