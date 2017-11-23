@@ -36,11 +36,9 @@ int main(void)
         }
         putchar('\n');
       }
-      else
-      {
-
-        printf("[%c] is not in the graph.\n", c);
-      }
+    else {
+      printf("[%c] is not in the graph.\n", c);
+    }
     }
   }
   DestoryGraph(&g);
