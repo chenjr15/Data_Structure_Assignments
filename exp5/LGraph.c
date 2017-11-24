@@ -116,6 +116,33 @@ Status DestoryGraph(LGraph *g) {
   }
   return OK;
 } //DestoryGraph
+
+
+Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2) {
+  Edge *e = NULL;
+  e = malloc(sizeof(ArcNode));
+  if (!e)
+    return ERROR;
+  e->v1 = v1;
+  e->v2 = v2;
+  EnQueue(Q_EdgePtr, (SElemType *)&e);
+  return OK;
+} //InsertEdgeToQueue
+Status PrintEdgeQueue(queue *Q_EdgePtr) {
+  Edge *edgeptr = NULL;
+  while (DeQueue(Q_EdgePtr, (SElemType *)&edgeptr) == OK) {
+    if (!edgeptr)
+      continue;
+    OUTPUT_EDGE(edgeptr);
+    //free the memory of each queue node
+    free(edgeptr);
+    edgeptr = NULL;
+  }
+  putchar('\n');
+  return 0;
+} //PrintEdgeQueue
+
+
 Status DFS(LGraph *g, int start, int *visited, queue *q) {
   if (g == NULL || visited == NULL || q == NULL)
     return INVALID_ARGUMENT;
@@ -161,55 +188,27 @@ Status BFS(LGraph *g, int start, int *visited, queue *q_edge) {
   int i = 0, j = 0;
   while (DeQueue(&q_arcnode, (SElemType *)&arc_ptr) == OK) {
     if (visited[arc_ptr->vexindex] == FALSE) {
-      if (V_last > -1) {
-
-        if (RelateCnt > 0)
-          RelateCnt[i]--;
-        InsertEdgeToQueue(q_edge, V_root, arc_ptr->vexindex);
-      }
       OUTPUT_VERTIX(arc_ptr->vexindex);
       visited[arc_ptr->vexindex] = TRUE;
     }
     V_last = arc_ptr->vexindex;
-    if (RelateCnt[i] == 0 && V_last > -1) {
-      V_root = V_last;
-      i++;
-    }
 
     arc_ptr = g->vertices[arc_ptr->vexindex].first;
     while (arc_ptr) {
 
       if (visited[arc_ptr->vexindex] == FALSE) {
-        RelateCnt[j]++;
+        if(RelateCnt[arc_ptr->vexindex]==FALSE){
+          InsertEdgeToQueue(q_edge, V_last, arc_ptr->vexindex);
+          RelateCnt[arc_ptr->vexindex]==TRUE;
+        }
+        
         EnQueue(&q_arcnode, (SElemType *)&arc_ptr);
       }
       arc_ptr = arc_ptr->next;
-    }
+    }// while (arc_ptr) loop for insert related V
+    RelateCnt[V_last]==TRUE;
     j++;
-  }
+  }//while (DeQueue())
   DestoryQueue(&q_arcnode);
   return OK;
 } //BFS
-Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2) {
-  Edge *e = NULL;
-  e = malloc(sizeof(ArcNode));
-  if (!e)
-    return ERROR;
-  e->v1 = v1;
-  e->v2 = v2;
-  EnQueue(Q_EdgePtr, (SElemType *)&e);
-  return OK;
-} //InsertEdgeToQueue
-Status PrintEdgeQueue(queue *Q_EdgePtr) {
-  Edge *edgeptr = NULL;
-  while (DeQueue(Q_EdgePtr, (SElemType *)&edgeptr) == OK) {
-    if (!edgeptr)
-      continue;
-    OUTPUT_EDGE(edgeptr);
-    //free the memory of each queue node
-    free(edgeptr);
-    edgeptr = NULL;
-  }
-  putchar('\n');
-  return 0;
-} //PrintEdgeQueue
