@@ -7,24 +7,22 @@
 typedef enum { DG,
                DN,
                UDG,
-               UDN } GraphKind;
+               UDN
+             } GraphKind;
 typedef int VRType;
 
-typedef struct arcnode
-{
-  //vertix index
-  int vexindex;
-  struct arcnode *next;
+typedef struct arcnode {
+    //vertix index
+    int vexindex;
+    struct arcnode *next;
 } ArcNode;
-typedef struct vnode
-{
-  ArcNode *first;
+typedef struct vnode {
+    ArcNode *first;
 } VNode, AdjList[MAX_VERTEX_NUM];
-typedef struct
-{
-  AdjList vertices;
-  int vexnum, arcnum;
-  int kind;
+typedef struct {
+    AdjList vertices;
+    int vexnum, arcnum;
+    int kind;
 } LGraph;
 
 // typedef struct edge{
@@ -51,7 +49,9 @@ Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2);
 #define OUTPUT_VERTIX(ch) printf("[" FONT_COLOR "%c" NONE "]->", (ch) + 'A')
 #define OUTPUT_EDGE(edgeptr) printf("(" FONT_COLOR "%c" NONE "," FONT_COLOR "%c" NONE "), ", \
                                       (edgeptr)->v1 + 'A', (edgeptr)->v2 + 'A');
+#define OUTPUT_HEAD(ch) printf( HEAD_COLOR " [%c]->" NONE, (ch) + 'A')
 #else
 #define OUTPUT_EDGE(edgeptr) printf("(%c,%c), ", edgeptr->v1 + 'A', edgeptr->v2 + 'A');
 #define OUTPUT_VERTIX(ch) printf("[%c]->", (ch) + 'A')
+#define OUTPUT_HEAD(ch) printf( " [ %c ] -> " , (ch) + 'A')
 #endif

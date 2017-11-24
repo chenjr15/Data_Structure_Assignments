@@ -5,11 +5,11 @@
 #define FALSE 0
 #define MAX(a,b) ((a)>(b)?(a):(b))
 typedef enum STATUS {
-  OK,
-  ERROR,
-  INFEASIBLE,
-  OVERFLOW,
-  INVALID_ARGUMENT
+    OK,
+    ERROR,
+    INFEASIBLE,
+    OVERFLOW,
+    INVALID_ARGUMENT
 } Status;
 
 #define STACK_INIT_LEN 20
@@ -17,33 +17,31 @@ typedef enum STATUS {
 typedef char bool;
 
 typedef char ElemType;
-typedef struct bintree
-{
-  ElemType data;
-  struct bintree *L;
-  struct bintree *R;
+typedef struct bintree {
+    ElemType data;
+    struct bintree *L;
+    struct bintree *R;
 } BinTree;
 
-typedef struct edge{
-  int v1,v2;
-}Edge;
+typedef struct edge {
+    int v1,v2;
+} Edge;
 
 typedef void*  SElemType;
 
 
-typedef struct
-{
-  SElemType base[STACK_INIT_LEN];
-  unsigned int size;
+typedef struct {
+    SElemType base[STACK_INIT_LEN];
+    unsigned int size;
 } LinerStack;
 
-typedef struct{
-	SElemType	*data;
-	int head;
-	int rear;
-	int len;
-	
-}queue;
+typedef struct {
+    SElemType	*data;
+    int head;
+    int rear;
+    int len;
+
+} queue;
 
 
 #define NONE                 "\e[0m"
@@ -73,5 +71,6 @@ typedef struct{
 #define CLRLINE              "\r\e[K" //or "\e[1K\r"
 
 #define FONT_COLOR L_CYAN
+#define HEAD_COLOR YELLOW
 //#define COLORTEXT
 #endif // !__COMMON_H__
