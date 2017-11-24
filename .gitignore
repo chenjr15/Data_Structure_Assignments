@@ -10,3 +10,5 @@ debug/
 *.pdf
 *.zip
 */.vscode/
+*.exe
+*.txt
