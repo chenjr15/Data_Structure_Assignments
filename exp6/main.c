@@ -22,6 +22,7 @@ int main( void ) {
     queue Q_Edge;
 
     InitQueue( &Q_Edge, QUEUE_LEN );
+#if 0
     while ( ( c = getchar() ) != EOF ) {
         if ( !isupper( c ) )
             continue;
@@ -29,7 +30,7 @@ int main( void ) {
             printf( "[%c] is not in the graph.\n", c );
             continue;
         }
-#if DFS
+
         /****************Start of DFS****************************/
         memset( visited, 0, sizeof( int ) * MAX_VERTEX_NUM );
         //DFS
@@ -41,7 +42,7 @@ int main( void ) {
         PrintEdgeQueue( &Q_Edge );
         DestoryQueue( &Q_Edge );
         /***************End of DFS*********************************/
-#endif
+
         InitQueue( &Q_Edge, QUEUE_LEN );
         /****************Start of BFS****************************/
         memset( visited, 0, sizeof( int ) * MAX_VERTEX_NUM );
@@ -50,7 +51,10 @@ int main( void ) {
         printf( " |\n" );
         PrintEdgeQueue( &Q_Edge );
         /***************End of DFS*********************************/
+
     }
+#endif
+    FindPath(&g,'L'-'A','I'-'A','K'-'A',&g);
     DestoryQueue( &Q_Edge );
     DestoryGraph( &g );
     printf( "Done!\nPress Enter to exit." );

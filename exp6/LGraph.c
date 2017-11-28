@@ -97,7 +97,7 @@ Status SimplePrint( Graph *g ) {
     for ( int i = 0; i < MAX_VERTEX_NUM; i++ ) {
         p = g->vertices[i].first;
         if ( !p )
-            break;
+            continue;
         OUTPUT_HEAD( i );
         while ( p ) {
             OUTPUT_VERTIX( p->vexindex );
@@ -200,65 +200,58 @@ Status BFS( LGraph *g, int start, int *visited, queue *q_edge ) {
     return OK;
 } //BFS
 
-Status IsPriVertex( ArcNode* path_array, int v_now, int v_tofind ) {
-
-}
 Status FindPath( LGraph *g, int src, int dest, int exculede, Edge *paths ) {
     if ( g == NULL || paths == NULL )
         return INVALID_ARGUMENT;
+
     int visited[MAX_VERTEX_NUM] = {0};
-    queue* path_array[20] = {{0},};
-    int path_array_index = 0;
+    /* 遍历用队列 */
+    queue q_arcnode;
+    InitQueue( &q_arcnode, QUEUE_LEN );
+    /*构造第一个顶点*/
     ArcNode first = {
         .vexindex = src,
         .next = g->vertices[src].first
     };
     ArcNode *first_p = &first;
+    /* 加入第一个顶点*/
+    EnQueue( &q_arcnode, ( SElemType * )&first_p );
+
     ArcNode *arc_ptr =  g->vertices[src].first;
     if ( !arc_ptr )
         return ERROR;
-    /*边标志位*/
-    int RelateCnt[MAX_VERTEX_NUM] = {0};
 
     int V_last = -1, V_root = -1;
-    /* 遍历用队列 */
-    queue q_arcnode;
-    InitQueue( &q_arcnode, QUEUE_LEN );
-    //加入第一个顶点
-    EnQueue( &q_arcnode, ( SElemType * )&first_p );
-
+    /*构造路径有向图*/
+    Graph* path_graph_ptr = malloc(sizeof(Graph));
+    InitGraph( path_graph_ptr, g->vexnum, DG );
     while ( DeQueue( &q_arcnode, ( SElemType * )&arc_ptr ) == OK ) {
         V_root = arc_ptr->vexindex;
         if ( visited[V_root] == FALSE ) {
-            OUTPUT_VERTIX( V_root );
+            // OUTPUT_VERTIX( V_root );
             visited[V_root] = TRUE;
         }
-
         //遍历所有与其相连的顶点
         arc_ptr = g->vertices[V_root].first;
-        queue* path =  malloc( sizeof( queue ) );
-        InitQueue( path, MAX_VERTEX_NUM );
-        path_array[path_array_index++] = path;
+        Edge e = {0, V_root};
         while ( arc_ptr ) {
-            if( !IsPriVertex( path, V_root, arc_ptr->vexindex ) )
-                EnQueue( path, &( g->vertices[arc_ptr->vexindex] ) );
+            e.v1 = arc_ptr->vexindex;
+            if( !IsRelated( path_graph_ptr, e ) ) {
+                InsertEdge( path_graph_ptr, (Edge){V_root,e.v1} );
+            }
+
             if ( visited[arc_ptr->vexindex] == FALSE ) {
                 EnQueue( &q_arcnode, ( SElemType * )&arc_ptr );
-                /* (V_last <0)  判断是否第一次进入*/
-                if(  ( ( RelateCnt[arc_ptr->vexindex] == FALSE ) ) || ( V_last < 0 )  ) {
-                    // InsertEdgeToQueue( q_edge, V_root, arc_ptr->vexindex );
-                    RelateCnt[arc_ptr->vexindex] = TRUE;
-                }
             }
             arc_ptr = arc_ptr->next;
         }// while (arc_ptr) loop for insert related V
-        if( V_last >= 0 ) {
-            RelateCnt[V_last] = TRUE;
-        }
+
 
         V_last = V_root;
     }//while (DeQueue())
     DestoryQueue( &q_arcnode );
+    SimplePrint( path_graph_ptr );
+
     return OK;
 
 }

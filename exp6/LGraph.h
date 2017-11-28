@@ -43,6 +43,7 @@ Status DFS(LGraph *g, int start, int *visited, queue *q);
 Status BFS(LGraph *g, int start, int *visited, queue *q_edge);
 Status PrintEdgeQueue(queue *Q_EdgePtr);
 Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2);
+Status FindPath( LGraph *g, int src, int dest, int exculede, Edge *paths ) ;
 
 //
 #ifdef COLORTEXT
