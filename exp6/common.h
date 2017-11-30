@@ -27,7 +27,7 @@ typedef struct edge {
     int v1,v2;
 } Edge;
 
-typedef void*  SElemType;
+typedef int   SElemType;
 
 
 typedef struct {

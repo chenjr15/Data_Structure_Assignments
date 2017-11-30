@@ -32,18 +32,18 @@ typedef struct {
 typedef LGraph Graph;
 
 
-Status InsertEdge(LGraph *g, Edge e);
-Status AddRelation(LGraph *g, int v1_index, int v2_index);
-Status IsRelated(LGraph *g, Edge e);
-Status BuildGraph(LGraph *g, FILE *f);
-Status InitGraph(LGraph *g, unsigned num, GraphKind t);
-Status SimplePrint(Graph *g);
-Status DestoryGraph(LGraph *g);
-Status DFS(LGraph *g, int start, int *visited, queue *q);
-Status BFS(LGraph *g, int start, int *visited, queue *q_edge);
-Status PrintEdgeQueue(queue *Q_EdgePtr);
-Status InsertEdgeToQueue(queue *Q_EdgePtr, int v1, int v2);
-Status FindPath( LGraph *g, int src, int dest, int exculede, Edge *paths ) ;
+Status InsertEdge( LGraph *g, Edge e );
+Status AddRelation( LGraph *g, int v1_index, int v2_index );
+Status IsRelated( LGraph *g, Edge e );
+Status BuildGraph( LGraph *g, FILE *f );
+Status InitGraph( LGraph *g, unsigned num, GraphKind t );
+Status SimplePrint( Graph *g );
+Status DestoryGraph( LGraph *g );
+// Status DFS( LGraph *g, int start, int *visited, queue *q );
+// Status BFS( LGraph *g, int start, int *visited, queue *q_edge );
+Status PrintEdgeQueue( queue *Q_EdgePtr );
+Status InsertEdgeToQueue( queue *Q_EdgePtr, int v1, int v2 );
+Status FindPath( LGraph *g, int src, int dest, int exculede, int  *visited, queue* Q ) ;
 
 //
 #ifdef COLORTEXT

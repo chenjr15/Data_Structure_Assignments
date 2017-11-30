@@ -11,6 +11,7 @@
 Status InitQueue(queue* D,int len);
 Status EnQueue(queue* D,const SElemType *data );
 Status DeQueue(queue* D,SElemType *data );
+Status DeQueueR(queue* D,SElemType *data );
 Status DestoryQueue(queue* D);
 void OutputQueue(queue* D);
 Status IsInQueue(queue* Q,SElemType* data);
