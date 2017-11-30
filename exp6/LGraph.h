@@ -12,7 +12,7 @@ typedef enum { DG,
 typedef int VRType;
 
 typedef struct arcnode {
-    //vertix index
+    //vertEX index
     int vexindex;
     struct arcnode *next;
 } ArcNode;
@@ -47,12 +47,14 @@ Status FindPath( LGraph *g, int src, int dest, int exculede, int  *visited, queu
 
 //
 #ifdef COLORTEXT
-#define OUTPUT_VERTIX(ch) printf("[" FONT_COLOR "%c" NONE "]->", (ch) + 'A')
+#define OUTPUT_VERTEX(ch) printf("[" FONT_COLOR "%c" NONE "]->", (ch) + 'A')
 #define OUTPUT_EDGE(edgeptr) printf("(" FONT_COLOR "%c" NONE "," FONT_COLOR "%c" NONE "), ", \
                                       (edgeptr)->v1 + 'A', (edgeptr)->v2 + 'A');
 #define OUTPUT_HEAD(ch) printf( HEAD_COLOR " [%c]->" NONE, (ch) + 'A')
+#define OUTPUT_VERTEX_PLAIN(ch) printf("[" HEAD_COLOR "%c" NONE "]", (ch) + 'A')
 #else
 #define OUTPUT_EDGE(edgeptr) printf("(%c,%c), ", edgeptr->v1 + 'A', edgeptr->v2 + 'A');
-#define OUTPUT_VERTIX(ch) printf("[%c]->", (ch) + 'A')
+#define OUTPUT_VERTEX(ch) printf("[%c]->", (ch) + 'A')
+#define OUTPUT_VERTEX_PLAIN(ch) printf("[%c]", (ch) + 'A')
 #define OUTPUT_HEAD(ch) printf( " [ %c ] -> " , (ch) + 'A')
 #endif

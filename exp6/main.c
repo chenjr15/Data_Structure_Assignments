@@ -19,13 +19,18 @@ int main( void ) {
     int visited[MAX_VERTEX_NUM] = {
         0
     };
-    memset(visited,0,sizeof(int)*MAX_VERTEX_NUM);
+    memset( visited, 0, sizeof( int )*MAX_VERTEX_NUM );
     queue*  Q = malloc( sizeof( queue ) );
     InitQueue( Q, QUEUE_LEN );
-    FindPath( &g, 'L' - 'A', 'I' - 'A', 'K' - 'A', visited,Q );
+    printf( "Please input  start dest exculude \n" );
+    char s, d, e;
+    scanf( "%c%c%c", &s, &d, &e );
+    FindPath( &g, s - 'A', d - 'A', e - 'A', visited, Q );
+
     DestoryQueue( Q );
     DestoryGraph( &g );
     printf( "Done!\nPress Enter to exit." );
-   // getchar();
+    getchar();
+    getchar();
     return OK;
 }

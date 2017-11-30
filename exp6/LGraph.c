@@ -6,6 +6,16 @@
 #include "Queue.h"
 #include "LGraph.h"
 
+void OutputQueue( queue *D ) {
+    int i;
+    for ( i = 0; i < D->len; i++ ) {
+        OUTPUT_VERTEX( GET( D, i ) );
+    }
+    //putchar( '\n' );
+    // printf( "len:%d", D->len );
+    // putchar( '\n' );
+} //OutputQueue
+
 Status InitGraph( LGraph *g, unsigned num, GraphKind t ) {
     if ( g == NULL )
         return INVALID_ARGUMENT;
@@ -100,7 +110,7 @@ Status SimplePrint( Graph *g ) {
             continue;
         OUTPUT_HEAD( i );
         while ( p ) {
-            OUTPUT_VERTIX( p->vexindex );
+            OUTPUT_VERTEX( p->vexindex );
             p = p->next;
         }
         printf( " |\n" );
@@ -160,10 +170,11 @@ Status FindPath( LGraph *g, int src, int dest, int exculede, int  *visited, queu
             continue;
         }
         if( ptr_edges->vexindex == dest ) {
-            EnQueue( Q, &dest );
+
             OutputQueue( Q );
-            DeQueue( Q, &temp );
-            break;
+            OUTPUT_VERTEX_PLAIN( dest );
+            putchar( '\n' );
+            //break;
         }
 
 
@@ -178,7 +189,7 @@ Status FindPath( LGraph *g, int src, int dest, int exculede, int  *visited, queu
     if( ptr_edges )
         return OK;
     else {
-        
+
         // visited[src] = 0;
         return ERROR;
     }

@@ -68,15 +68,7 @@ Status IsInQueue( queue* Q, SElemType* data ) {
     return ( i != Q->rear );
 }
 
-void OutputQueue( queue *D ) {
-    int i;
-    for ( i = 0; i < D->len; i++ ) {
-        printf( "%c-", GET( D, i ) + 'A' );
-    }
-    putchar( '\n' );
-    printf( "len:%d", D->len );
-    putchar( '\n' );
-} //OutputQueue
+
 Status DestoryQueue( queue *D ) {
     if ( D == NULL )
         return INVALID_ARGUMENT;
