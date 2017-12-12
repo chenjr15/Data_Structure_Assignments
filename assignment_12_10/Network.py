@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''Network '''
 import json
 from functools import reduce
@@ -23,7 +23,7 @@ class Edge:
         return cls(e.v2, e.v1, e.weight)
 
     def __hash__(self):
-        return hash(str(self.v1) + str(self.v2) )
+        return hash(str(self.v1) + str(self.v2))
 
     def __str__(self):
 
@@ -49,6 +49,7 @@ class Vertex:
 
     def __str__(self):
         return str(self.data)
+
     def __repr__(self):
         return str(self.data)
 
@@ -60,14 +61,14 @@ class Network:
     '''网络类。
     filename: 描述该图的json文件。
     dic: 描述该图的字典。
-    
+
     '''
 
     def __init__(self, filename=None, dic=None):
 
         self.edges = []
         self.adjlist = []
-        self.vertex=[]
+        self.vertex = []
         d = {}
         if filename is not None:
             with open(filename) as f:
@@ -81,11 +82,11 @@ class Network:
                 e = Edge(l[0], l[1], l[2])
                 self.edges.append(e)
             if d.__contains__('vertex'):
-                for i   in range(d['vertexnum']):
-                    self.vertex.append(Vertex(i,d['vertex'][i]))
+                for i in range(d['vertexnum']):
+                    self.vertex.append(Vertex(i, d['vertex'][i]))
             else:
-                 for i   in range(d['vertexnum']):
-                    self.vertex.append(Vertex(i,str(i)))
+                for i in range(d['vertexnum']):
+                    self.vertex.append(Vertex(i, str(i)))
 
         except Exception as e:
             print(e)
@@ -113,6 +114,7 @@ class Network:
 
         self.edges.append(e)
         self.adjlist[e.v1].append(e)
+
     def sum_of_edges(self):
         '''返回该图中所有边的长度和
         '''
@@ -148,16 +150,16 @@ class Network:
         # print(vertex_added)
         # print(str(edge_added))
         dic = dict(kind="DN", vertexnum=net.vertex_num, edges=[
-                   [e.v1, e.v2, e.weight] for e in edge_added],vertex = net.vertex)
+                   [e.v1, e.v2, e.weight] for e in edge_added], vertex=net.vertex)
         minspantree = Network(dic=dic)
         minspantree.build()
         return minspantree
-    @staticmethod
-    def find(path , v):
 
-    
-        while path[ v]!=-1:
-            v=path[v]
+    @staticmethod
+    def find(path, v):
+
+        while path[v] != -1:
+            v = path[v]
         return v
 
     @staticmethod
@@ -166,28 +168,30 @@ class Network:
         用kruskal算法生成一颗最小生成树
         返回Network类
         '''
-        mcst = Network(dic=dict(kind='DN', vertexnum=net.vertex_num, edges=[],vertex = net.vertex))
+        mcst = Network(
+            dic=dict(kind='DN', vertexnum=net.vertex_num, edges=[], vertex=net.vertex))
         mcst.build()
         net.edges.sort(key=lambda x: x.weight)
         path = [-1 for i in range(net.vertex_num)]
-        # edges =set( [  net.edges] ) 
+        # edges =set( [  net.edges] )
         added = set()
         for e in net.edges:
-            if len(mcst.edges)>=( mcst.vertex_num-1): break
-            if e.v1>e.v2 and net.kind[0] is 'U':
-                e=e.reverse()
+            if len(mcst.edges) >= (mcst.vertex_num - 1):
+                break
+            if e.v1 > e.v2 and net.kind[0] is 'U':
+                e = e.reverse()
             if e in added:
                 continue
             else:
                 added.add(e)
 
-            if net.find(path, e.v1) !=net.find(path, e.v2):
+            if net.find(path, e.v1) != net.find(path, e.v2):
                 i = net.find(path, e.v1)
-                path[i]=e.v2
+                path[i] = e.v2
                 mcst.addedge(e)
 
         return mcst
-    
+
     def __repr__(self):
         ret = "kind {}, {} vertexs, {} edges. ".format(
             self.kind, self.vertex_num, len(self.edges))
@@ -196,34 +200,37 @@ class Network:
 
     def __str__(self):
         ret = "kind {}, {} vertexs, {} edges, sum of edges : {}\n".format(
-            self.kind, self.vertex_num, len(self.edges),self.sum_of_edges())
+            self.kind, self.vertex_num, len(self.edges), self.sum_of_edges())
         ret += "Edges: \n"
         for i in range(len((self.adjlist))):
             ret += "{} -> {}\n".format(self.vertex[i], [(self.vertex[x.v2], x.weight)
-                                           for x in self.adjlist[i]])
+                                                        for x in self.adjlist[i]])
         return ret
+
     @staticmethod
     def topologic(net):
         '''拓扑排序算法，返回该图的一个拓扑序列(储存为顶点的列表)
         '''
         tpl = []
-        indegree = [ 0 for i in range(net.vertex_num) ]
+        indegree = [0 for i in range(net.vertex_num)]
         for e in net.edges:
-            indegree[e.v2]=indegree[e.v2]+1
+            indegree[e.v2] = indegree[e.v2] + 1
         v_set = set(iter(net.vertex))
-        
-        #print(indegree)
-        while len(v_set):
+
+        # print(indegree)
+        v = None
+        while len(v_set) > 0:
             for v in v_set:
-               if indegree[v.index] == 0:
-                   break
+                if indegree[v.index] == 0:
+                    break
             v_set.discard(v)
             for e in net.adjlist[v.index]:
-                indegree[e.v2] = indegree[e.v2] -1
-            tpl.append(v) 
-        #print(indegree)
-        #print(tpl)
+                indegree[e.v2] = indegree[e.v2] - 1
+            tpl.append(v)
+        # print(indegree)
+        # print(tpl)
         return tpl
+
 
 def main():
     N = Network("7.9.json")
@@ -246,7 +253,7 @@ def main():
     #     # m = N.kruskal(N)
     #     # print(m)
     t = Network.topologic(N)
-    print (t)
+    print(t)
 
 
 if __name__ == '__main__':
