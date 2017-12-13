@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -7,7 +5,6 @@
 struct _table {
     ElemType* elem;
     unsigned len;
-
 };
 typedef struct _table table;
 typedef struct _table*  table_ptr;
@@ -41,14 +38,14 @@ int main( int argc, char* argv[] ) {
     printf( "please input a number to search:" );
     scanf( "%d", &tosearch );
     printf( "Result by iteration:\n" );
-    place = BinSearchR( &t, tosearch );
+    place = BinSearch( &t, tosearch );
     if ( place < 0 ) {
         printf( "404 Not Found!\n" );
     } else {
         printf( "%d is at place %d\n", tosearch, place );
     }
     printf( "Result by recurtion::\n" );
-    place = BinSearch( &t, tosearch );
+    place = BinSearchR( &t, tosearch );
     if ( place < 0 ) {
         printf( "404 Not Found!\n" );
     } else {
@@ -59,9 +56,9 @@ int main( int argc, char* argv[] ) {
 /** 
  * @brief  迭代法求二分查找
  * @note   
- * @param  t: 
- * @param  tofind: 
- * @retval 
+ * @param  t: 被查找的线性表的指针
+ * @param  tofind: 需要查找的值
+ * @retval 查找到的下标，未查找到这返回-1
  */
 int BinSearch( table_ptr t, ElemType tofind ) {
     int index = -1;
@@ -69,10 +66,10 @@ int BinSearch( table_ptr t, ElemType tofind ) {
     L = 0;
     R = t->len - 1;
     M = ( L + R ) / 2;
-    while( ( L < R ) && L != R ) {
+    while( ( L <= R )  ) {
         if( t->elem[M] == tofind ) {
             index = M;
-            L = R;
+            break;
         } else if( t->elem[M] < tofind ) {
             L = M + 1;
         } else {
@@ -109,9 +106,9 @@ int BinSearchR_( table_ptr t, ElemType tofind, int L, int R ) {
 /** 
  * @brief  递归算法外层
  * @note   
- * @param  t: 
- * @param  tofind: 
- * @retval 
+ * @param  t: 被查找的线性表的指针
+ * @param  tofind: 需要查找的值
+ * @retval 查找到的下标，未查找到这返回-1
  */
 int BinSearchR( table_ptr t, ElemType tofind ) {
 

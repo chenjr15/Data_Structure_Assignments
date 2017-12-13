@@ -1,1 +1,1 @@
-gcc -g -std=c99 -o exp8.exe main.c
+gcc -g -std=c99 -o exp8.exe BinSearch.c
