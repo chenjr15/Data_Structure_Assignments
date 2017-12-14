@@ -149,8 +149,12 @@ class Network:
             vertex_added.append(e.v2)
         # print(vertex_added)
         # print(str(edge_added))
-        dic = dict(kind="DN", vertexnum=net.vertex_num, edges=[
-                   [e.v1, e.v2, e.weight] for e in edge_added], vertex=net.vertex)
+        dic = dict(
+            kind="DN",
+            vertexnum=net.vertex_num,
+            edges=[[e.v1, e.v2, e.weight] for e in edge_added],
+            vertex=net.vertex
+            )
         minspantree = Network(dic=dic)
         minspantree.build()
         return minspantree
@@ -212,9 +216,11 @@ class Network:
         '''拓扑排序算法，返回该图的一个拓扑序列(储存为顶点的列表)
         '''
         tpl = []
+        # 构建入度表，用于查询无入度的节点
         indegree = [0 for i in range(net.vertex_num)]
         for e in net.edges:
             indegree[e.v2] = indegree[e.v2] + 1
+        # 顶点集合
         v_set = set(iter(net.vertex))
 
         # print(indegree)
@@ -230,6 +236,64 @@ class Network:
         # print(indegree)
         # print(tpl)
         return tpl
+
+    @staticmethod
+    def topologic_all(net):
+        '''拓扑排序算法，返回该图的所有拓扑序列(储存为顶点的列表)
+        未完成
+        '''
+        # 用list模拟一个stack
+        stack = list()
+        v_set = set(iter(net.vertex))
+        # 构建入度表，用于查询无入度的顶点
+        indegree = [0 for i in range(net.vertex_num)]
+        for e in net.edges:
+            indegree[e.v2] = indegree[e.v2] + 1
+        zeroindegree = [x for x in net.vertex if indegree[x.index] == 0 ]
+        for i in zeroindegree:
+            for v in zeroindegree:
+                stack.append(v)
+                for vertex in net.vertex:
+                    if (indegree[vertex.index] != 0)or  (vertex in stack):
+                        continue
+                    stack.append(vertex)
+                    for e in net.adjlist[vertex.index]:
+                        indegree[e.v2] = indegree[e.v2] - 1
+            print(stack)
+            stack.pop()
+            zeroindegree = [x for x in net.vertex if indegree[x.index] == 0 ]
+
+    def DFS(self, start):
+        # 用list模拟一个stack
+        # 里面存放顶点索引
+        stack = list()
+        stack.append(self.vertex[start])
+        visited = [ False for i in range(self.vertex_num) ]
+        while True:
+            try:
+                #取栈顶元素，不出栈
+                vertex = stack[-1]
+            except IndexError:
+                #栈空时抛出 IndexError异常，此时跳出循环
+                break
+            #
+            #vertex 中的每个邻接顶点 adj_vertex
+            notvisited_num = 0
+            for edge in self.adjlist[vertex.index]:
+                adj_vertex = self.vertex[edge.v2]
+                #已被访问过，忽略
+                if visited[adj_vertex.index]:
+                    continue
+                notvisited_num = notvisited_num+1
+            if notvisited_num != 0:
+                #有节点未被访问，入栈，
+                print(vertex)
+                stack.append(vertex)
+                visited[vertex.index] = True
+                break
+            else:
+                stack.pop()
+        return
 
 
 def main():
@@ -254,7 +318,8 @@ def main():
     #     # print(m)
     t = Network.topologic(N)
     print(t)
-
+    #Network.topologic_all(N)
+    N.DFS(1)
 
 if __name__ == '__main__':
     main()
