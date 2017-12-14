@@ -212,9 +212,11 @@ class Network:
         '''拓扑排序算法，返回该图的一个拓扑序列(储存为顶点的列表)
         '''
         tpl = []
+        # 构建入度表，用于查询无入度的节点
         indegree = [0 for i in range(net.vertex_num)]
         for e in net.edges:
             indegree[e.v2] = indegree[e.v2] + 1
+        # 顶点集合
         v_set = set(iter(net.vertex))
 
         # print(indegree)
@@ -230,6 +232,31 @@ class Network:
         # print(indegree)
         # print(tpl)
         return tpl
+
+    @staticmethod
+    def topologic_all(net):
+        '''拓扑排序算法，返回该图的所有拓扑序列(储存为顶点的列表)
+        '''
+        # 用list模拟一个stack
+        stack = list()
+        v_set = set(iter(net.vertex))
+        # 构建入度表，用于查询无入度的顶点
+        indegree = [0 for i in range(net.vertex_num)]
+        for e in net.edges:
+            indegree[e.v2] = indegree[e.v2] + 1
+        zeroindegree = [x for x in net.vertex if indegree[x.index] == 0 ]
+        for i in zeroindegree:
+            for v in zeroindegree:
+                stack.append(v)
+                for vertex in net.vertex:
+                    if (indegree[vertex.index] != 0)or  (vertex in stack):
+                        continue
+                    stack.append(vertex)
+                    for e in net.adjlist[vertex.index]:
+                        indegree[e.v2] = indegree[e.v2] - 1
+            print(stack)
+            stack.pop()
+            zeroindegree = [x for x in net.vertex if indegree[x.index] == 0 ]
 
 
 def main():
@@ -254,7 +281,7 @@ def main():
     #     # print(m)
     t = Network.topologic(N)
     print(t)
-
+    Network.topologic_all(N)
 
 if __name__ == '__main__':
     main()
