@@ -331,12 +331,24 @@ class Network:
 
         return have_way
 
+    def print_matrix(self):
+        '''打印邻接矩阵
+         '''
+        for vertex in self.vertex:
+            line = [0 for i in range(self.vertex_num)]
+            for edge in self.adjlist[vertex.index]:
+                line[edge.v2] = edge.weight
+            print(line)
+
 
 def main():
     '''main'''
     N = Network("7.9.json")
     N.build()
     print(N)
+    N.print_matrix()
+    #print(N.prim(N, 0))
+    #print(N.kruskal(N))
     print("拓扑排序")
     t = Network.topologic(N)
     print(t)
