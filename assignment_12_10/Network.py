@@ -320,6 +320,7 @@ def main():
     print(t)
     #Network.topologic_all(N)
     N.DFS(1)
+    Network.topologic_all(N)
 
 if __name__ == '__main__':
     main()
