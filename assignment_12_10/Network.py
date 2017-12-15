@@ -294,9 +294,47 @@ class Network:
 
         return ret
 
+    def havepath(self, start, dest):
+        '''判断两个顶点之间是否可达\n
+            start 起点
+            dest 终点
+            返回值 True/False
+        '''
+        if start == dest:
+            return True
+        # 用list模拟一个stack
+        # 里面存放顶点索引
+        have_way = False
+        stack = list()
+        stack.append(self.vertex[start])
+        visited = [False for i in range(self.vertex_num)]
+        while True:
+            try:
+                # 取栈顶元素
+                vertex = stack.pop()
+            except IndexError:
+                # 栈空时抛出 IndexError异常，此时跳出循环
+                # print("Empty")
+                break
+            if visited[vertex.index] is True:
+                continue
+            # 该顶点vertex == dest 找到,break
+            if vertex.index == dest:
+                have_way = True
+                break
+            visited[vertex.index] = True
+            # vertex 中的每个未被访问过的邻接顶点入栈
+            for edge in self.adjlist[vertex.index]:
+                adj_vertex = self.vertex[edge.v2]
+                if visited[adj_vertex.index] is False:
+                    stack.append(adj_vertex)
+
+        return have_way
+
 
 def main():
-    N = Network("7.7.json")
+    '''main'''
+    N = Network("7.9.json")
     N.build()
     print(N)
     print("拓扑排序")
@@ -305,7 +343,11 @@ def main():
     print("DFS:")
     dfs = N.DFS(0)
     print(dfs)
-    # Network.topologic_all(N)
+    print("{}到{}".format(N.vertex[0], N.vertex[-1]))
+    if N.havepath(N.vertex[0].index, N.vertex[-1].index):
+        print("有路径可达")
+    else:
+        print("无路径可达")
 
 
 if __name__ == '__main__':
