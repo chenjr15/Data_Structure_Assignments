@@ -1,0 +1,1 @@
+gcc -g -std=c99 -o exp9.exe main.c Stack.c bintree.c BST.c
