@@ -5,6 +5,6 @@
 
 BinTree* InsertElem( BinTree* bt, ElemType* elem_p );
 BinTree* BuildBST( ElemType* elemlist, int len );
-BinTree* IsBST( BinTree* bt ) ;
+Status IsBST( BinTree* bt ) ;
 
 #endif // !__BST_H__

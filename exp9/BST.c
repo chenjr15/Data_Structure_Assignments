@@ -3,7 +3,7 @@
 #include "Stack.h"
 #include "bintree.h"
 
-BinTree* InsertL();
+/* 往二叉排序树中插入元素 */
 BinTree* InsertElem( BinTree* bt, ElemType* elem_p ) {
     BinTree* bt_head = bt ;
     BinTree* bt_new = CreateBT( elem_p );
@@ -23,8 +23,8 @@ BinTree* InsertElem( BinTree* bt, ElemType* elem_p ) {
         bt_parent->L =  bt_new;
     }
     return bt_parent;
-}
-
+}//InsertElem()
+/*构建二叉排序/搜索树*/
 BinTree* BuildBST( ElemType* elemlist, int len ) {
     BinTree* bt_head = CreateBT( elemlist );
     BinTree* bt = bt_head;
@@ -34,6 +34,7 @@ BinTree* BuildBST( ElemType* elemlist, int len ) {
     return bt_head;
 }//BuildBST()
 
+/* 判断是否二叉排序/搜索树 */
 BinTree* IsBST( BinTree* bt ) {
 
     if ( !bt ) return INVALID_ARGUMENT;
@@ -75,6 +76,7 @@ BinTree* IsBST( BinTree* bt ) {
             bt = bt->R;
         }
     }
+    getchar();
     return OK;
-}
+}//IsBST()
 
