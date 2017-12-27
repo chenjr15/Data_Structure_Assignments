@@ -4,6 +4,7 @@
 #define TRUE 1
 #define FALSE 0
 #define MAX(a,b) ((a)>(b)?(a):(b))
+#define MAXSIZE 100
 typedef enum STATUS {
     OK,
     ERROR,
@@ -15,6 +16,20 @@ typedef enum STATUS {
 #define STACK_INIT_LEN 20
 
 typedef char bool;
+
+/* 关键字类型 */
+typedef int KeyType;
+/* 记录类型 */
+typedef struct{
+    KeyType key;
+    /* Infotype otherinfo; */
+
+}RedType;/*  */
+/* 顺序表类型 */
+typedef struct {
+    RedType r[MAXSIZE+1];/* r[0]放置哨兵 */
+    int length;
+}SqList;
 
 typedef int ElemType;
 typedef struct bintree {
@@ -44,6 +59,7 @@ typedef struct {
 
 } queue;
 
+#define COLOR_START
 
 #define NONE                 "\e[0m"
 #define BLACK                "\e[0;30m"
@@ -74,4 +90,6 @@ typedef struct {
 #define FONT_COLOR L_CYAN
 #define HEAD_COLOR YELLOW
 //#define COLORTEXT
+
+#define COLOR_END
 #endif // !__COMMON_H__
